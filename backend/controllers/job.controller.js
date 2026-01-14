@@ -417,3 +417,55 @@ export const updateApplicationStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Withdraw application
+// @route   DELETE /api/jobs/:id/applications/:applicationId
+// @access  Private/Worker
+export const withdrawApplication = async (req, res, next) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: 'Job not found'
+      });
+    }
+
+    const application = job.applicants.id(req.params.applicationId);
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found'
+      });
+    }
+
+    // Check if the logged in user is the applicant
+    if (application.worker.toString() !== req.user._id.toString()) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized to withdraw this application'
+      });
+    }
+
+    // Check if application can be withdrawn
+    if (application.status === 'hired') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot withdraw an application that has been hired'
+      });
+    }
+
+    // Remove the application
+    application.deleteOne();
+    await job.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Application withdrawn successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FiMapPin, FiFilter, FiSearch, FiNavigation } from 'react-icons/fi';
 import LocationMap from '../../../components/LocationMap';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import EmptyState from '../../../components/EmptyState';
+import api from '../../../lib/axios';
+import toast from 'react-hot-toast';
 
 const WorkerSearch = () => {
   const [workers, setWorkers] = useState([]);
@@ -17,77 +20,47 @@ const WorkerSearch = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState([10.8505, 76.2711]); // Kerala
 
-  // Mock workers with locations
-  const mockWorkers = [
-    {
-      id: 1,
-      name: 'Rajesh Kumar',
-      profession: 'Electrician',
-      rating: 4.8,
-      reviews: 124,
-      hourlyRate: 500,
-      location: { lat: 10.8505, lng: 76.2711, city: 'Thrissur' },
-      avatar: 'https://ui-avatars.com/api/?name=Rajesh+Kumar',
-      skills: ['Wiring', 'Installation', 'Repair'],
-      available: true,
-    },
-    {
-      id: 2,
-      name: 'Mohammed Ali',
-      profession: 'Plumber',
-      rating: 4.9,
-      reviews: 98,
-      hourlyRate: 450,
-      location: { lat: 10.5276, lng: 76.2144, city: 'Kochi' },
-      avatar: 'https://ui-avatars.com/api/?name=Mohammed+Ali',
-      skills: ['Pipe Fitting', 'Leak Repair', 'Installation'],
-      available: true,
-    },
-    {
-      id: 3,
-      name: 'Suresh Babu',
-      profession: 'Carpenter',
-      rating: 4.7,
-      reviews: 156,
-      hourlyRate: 600,
-      location: { lat: 11.2588, lng: 75.7804, city: 'Kozhikode' },
-      avatar: 'https://ui-avatars.com/api/?name=Suresh+Babu',
-      skills: ['Furniture', 'Door/Window', 'Renovation'],
-      available: false,
-    },
-    {
-      id: 4,
-      name: 'Priya Nair',
-      profession: 'Painter',
-      rating: 4.6,
-      reviews: 87,
-      hourlyRate: 400,
-      location: { lat: 8.5241, lng: 76.9366, city: 'Thiruvananthapuram' },
-      avatar: 'https://ui-avatars.com/api/?name=Priya+Nair',
-      skills: ['Interior', 'Exterior', 'Texture'],
-      available: true,
-    },
-    {
-      id: 5,
-      name: 'Anil Thomas',
-      profession: 'Welder',
-      rating: 4.9,
-      reviews: 134,
-      hourlyRate: 550,
-      location: { lat: 9.9312, lng: 76.2673, city: 'Kottayam' },
-      avatar: 'https://ui-avatars.com/api/?name=Anil+Thomas',
-      skills: ['Arc Welding', 'Gas Welding', 'Fabrication'],
-      available: true,
-    },
-  ];
+  // Fetch real workers from API
+  const fetchWorkers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get('/workers', {
+        params: {
+          limit: 50,
+          availability: 'available'
+        }
+      });
+      
+      // Transform workers data for map compatibility
+      const workersData = data.data.map(worker => ({
+        _id: worker._id,
+        name: worker.name,
+        profession: worker.skills?.[0] || 'Skilled Worker',
+        rating: worker.rating?.average || 0,
+        reviews: worker.rating?.count || 0,
+        hourlyRate: worker.hourlyRate || 0,
+        location: {
+          lat: worker.location?.coordinates?.[1] || 10.8505,
+          lng: worker.location?.coordinates?.[0] || 76.2711,
+          city: worker.location?.city || 'Kerala'
+        },
+        avatar: worker.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(worker.name)}`,
+        skills: worker.skills || [],
+        available: worker.availability?.status === 'available',
+      }));
+      
+      setWorkers(workersData);
+      setFilteredWorkers(workersData);
+    } catch (error) {
+      console.error('Error fetching workers:', error);
+      toast.error('Failed to load workers');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setWorkers(mockWorkers);
-      setFilteredWorkers(mockWorkers);
-      setLoading(false);
-    }, 1000);
+    fetchWorkers();
   }, []);
 
   const getUserLocation = () => {
@@ -144,7 +117,7 @@ const WorkerSearch = () => {
     popup: {
       title: worker.name,
       description: `${worker.profession} • ₹${worker.hourlyRate}/hr • ${worker.rating}⭐`,
-      action: () => window.location.href = `/workers/${worker.id}`,
+      action: () => window.location.href = `/workers/${worker._id}`,
       actionLabel: 'View Profile',
     },
   }));
@@ -257,7 +230,7 @@ const WorkerSearch = () => {
               />
             ) : (
               filteredWorkers.map((worker) => (
-                <div key={worker.id} className="card-hover">
+                <div key={worker._id} className="card-hover">
                   <div className="flex gap-4">
                     <img
                       src={worker.avatar}
@@ -283,7 +256,7 @@ const WorkerSearch = () => {
                       <div className="flex items-center gap-4 mt-2 text-sm">
                         <div className="flex items-center gap-1">
                           <span className="text-amber-500">⭐</span>
-                          <span className="font-medium">{worker.rating}</span>
+                          <span className="font-medium">{worker.rating.toFixed(1)}</span>
                           <span className="text-slate-600">({worker.reviews})</span>
                         </div>
                         <div className="flex items-center gap-1 text-slate-600">
@@ -300,7 +273,7 @@ const WorkerSearch = () => {
                       </div>
 
                       <div className="flex flex-wrap gap-2 mt-3">
-                        {worker.skills.map((skill, idx) => (
+                        {worker.skills.slice(0, 4).map((skill, idx) => (
                           <span
                             key={idx}
                             className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs"
@@ -311,12 +284,12 @@ const WorkerSearch = () => {
                       </div>
 
                       <div className="flex gap-2 mt-4">
-                        <button className="btn btn-primary flex-1">
+                        <Link to={`/workers/${worker._id}`} className="btn btn-primary flex-1">
                           View Profile
-                        </button>
-                        <button className="btn btn-outline flex-1">
+                        </Link>
+                        <Link to={`/workers/${worker._id}`} className="btn btn-outline flex-1">
                           Contact
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

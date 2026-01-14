@@ -175,10 +175,10 @@ const JobDetails = () => {
                 <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900 mb-2">{job.title}</h1>
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <h2 className="text-lg text-slate-700 font-medium">{job.employer?.companyName || job.company || 'Company'}</h2>
-                  {(job.employer?.rating || job.companyRating) && (
+                  {(job.employer?.rating?.average || job.companyRating) && (
                     <div className="flex items-center gap-1 text-amber-500">
                       <FiStar className="w-4 h-4 fill-amber-400" />
-                      <span className="text-sm font-medium text-slate-900">{job.employer?.rating || job.companyRating}</span>
+                      <span className="text-sm font-medium text-slate-900">{(job.employer?.rating?.average || job.companyRating).toFixed(1)}</span>
                     </div>
                   )}
                 </div>
@@ -209,7 +209,7 @@ const JobDetails = () => {
               </div>
               <div className="flex items-center gap-3 text-slate-700">
                 <FiClock className="w-5 h-5 text-primary-500" />
-                <span>Duration: {job.duration || 'Not specified'}</span>
+                <span>Duration: {job.duration?.value ? `${job.duration.value} ${job.duration.unit || 'days'}` : 'Not specified'}</span>
               </div>
               <div className="flex items-center gap-3 text-slate-700">
                 <FiCalendar className="w-5 h-5 text-primary-500" />

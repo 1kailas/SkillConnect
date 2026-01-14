@@ -110,9 +110,9 @@ const Jobs = () => {
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search jobs..." className="input pl-10 w-full" />
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
             {['all', 'open', 'in-progress', 'completed', 'closed'].map((status) => (
-              <button key={status} onClick={() => setFilter(status)} className={`btn whitespace-nowrap ${filter === status ? 'btn-primary' : 'btn-outline'}`}>
+              <button key={status} onClick={() => setFilter(status)} className={`btn whitespace-nowrap flex-shrink-0 ${filter === status ? 'btn-primary' : 'btn-outline'}`}>
                 {status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </button>
             ))}
@@ -147,6 +147,9 @@ const Jobs = () => {
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
+                  <Link to={`/jobs/${job._id}`} className="btn btn-outline w-full md:w-auto">
+                    <FiExternalLink /> View Details
+                  </Link>
                   {!hasApplied(job) && job.status === 'open' ? (
                     <button onClick={() => handleApply(job._id)} className="btn btn-primary w-full md:w-auto">
                       Apply Now
@@ -155,11 +158,7 @@ const Jobs = () => {
                     <button disabled className="btn btn-outline w-full md:w-auto cursor-not-allowed opacity-50">
                       Already Applied
                     </button>
-                  ) : (
-                    <Link to={`/jobs/${job._id}`} className="btn btn-outline w-full md:w-auto">
-                      <FiExternalLink /> View Details
-                    </Link>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </motion.div>

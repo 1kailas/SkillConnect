@@ -9,6 +9,7 @@ import {
   getJobApplications,
   getMyApplications,
   updateApplicationStatus,
+  withdrawApplication,
   searchJobs
 } from '../controllers/job.controller.js';
 import { protect, authorize } from '../middleware/auth.middleware.js';
@@ -25,5 +26,6 @@ router.delete('/:id', protect, authorize('employer'), deleteJob);
 router.post('/:id/apply', protect, authorize('worker'), applyForJob);
 router.get('/:id/applications', protect, authorize('employer'), getJobApplications);
 router.put('/:id/applications/:applicationId', protect, authorize('employer'), updateApplicationStatus);
+router.delete('/:id/applications/:applicationId', protect, authorize('worker'), withdrawApplication);
 
 export default router;

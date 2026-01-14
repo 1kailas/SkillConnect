@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import api from '../../../lib/axios';
 import toast from 'react-hot-toast';
+import { withdrawApplication } from '../../../services/jobService';
 
 const Applications = () => {
   const [filter, setFilter] = useState('all');
@@ -40,6 +41,22 @@ const Applications = () => {
       setApplications([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleWithdraw = async (applicationId, jobId) => {
+    if (!window.confirm('Are you sure you want to withdraw this application? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await withdrawApplication(jobId, applicationId);
+      toast.success('Application withdrawn successfully');
+      // Refresh applications
+      fetchApplications();
+    } catch (error) {
+      console.error('Error withdrawing application:', error);
+      toast.error(error.response?.data?.message || 'Failed to withdraw application');
     }
   };
 
@@ -102,9 +119,9 @@ const Applications = () => {
       </div>
 
       <div className="card">
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-1 px-1">
           {['all', 'pending', 'under_review', 'shortlisted', 'accepted', 'rejected'].map((status) => (
-            <button key={status} onClick={() => setFilter(status)} className={`btn btn-sm whitespace-nowrap ${filter === status ? 'btn-primary' : 'btn-outline'}`}>
+            <button key={status} onClick={() => setFilter(status)} className={`btn btn-sm whitespace-nowrap flex-shrink-0 ${filter === status ? 'btn-primary' : 'btn-outline'}`}>
               {status === 'all' ? 'All' : status === 'under_review' ? 'Under Review' : status.charAt(0).toUpperCase() + status.slice(1)}
             </button>
           ))}
@@ -149,8 +166,13 @@ const Applications = () => {
                   </div>
                   <div className="flex md:flex-col gap-2">
                     <Link to={`/jobs/${app.id}`} className="btn btn-outline flex-1 md:flex-none whitespace-nowrap">View Job</Link>
-                    {app.status !== 'rejected' && (
-                      <button className="btn btn-outline flex-1 md:flex-none text-rose-600 hover:text-rose-700 hover:border-rose-600">Withdraw</button>
+                    {app.status !== 'rejected' && app.status !== 'hired' && (
+                      <button 
+                        onClick={() => handleWithdraw(app.applicationId, app.id)} 
+                        className="btn btn-outline flex-1 md:flex-none text-rose-600 hover:text-rose-700 hover:border-rose-600"
+                      >
+                        Withdraw
+                      </button>
                     )}
                   </div>
                 </div>

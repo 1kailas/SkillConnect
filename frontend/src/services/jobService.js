@@ -59,3 +59,9 @@ export const updateApplicationStatus = async (jobId, applicationId, status) => {
   const { data } = await api.put(`/jobs/${jobId}/applications/${applicationId}`, { status });
   return data;
 };
+
+// Withdraw application
+export const withdrawApplication = async (jobId, applicationId) => {
+  const { data } = await api.delete(`/jobs/${jobId}/applications/${applicationId}`);
+  return data;
+};
