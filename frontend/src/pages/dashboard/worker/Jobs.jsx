@@ -64,8 +64,8 @@ const Jobs = () => {
   };
 
   const stats = [
-    { label: 'Total Jobs', value: jobs.length, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    { label: 'Open Jobs', value: jobs.filter(j => j.status === 'open').length, color: 'text-green-600', bgColor: 'bg-green-50' },
+    { label: 'Total Jobs', value: jobs.length, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    { label: 'Open Jobs', value: jobs.filter(j => j.status === 'open').length, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
     { label: 'My Applications', value: jobs.filter(j => hasApplied(j)).length, color: 'text-purple-600', bgColor: 'bg-purple-50' },
   ];
 
@@ -80,8 +80,8 @@ const Jobs = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-1">My Jobs</h1>
-        <p className="text-gray-600">Track and manage all your jobs</p>
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900 mb-1">My Jobs</h1>
+        <p className="text-slate-600">Track and manage all your jobs</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-4">
@@ -90,8 +90,8 @@ const Jobs = () => {
             <div className={`w-12 h-12 rounded-lg ${stat.bgColor} flex items-center justify-center mb-3`}>
               <FiBriefcase className={`w-6 h-6 ${stat.color}`} />
             </div>
-            <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-            <div className="text-sm text-gray-600">{stat.label}</div>
+            <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+            <div className="text-sm text-slate-600">{stat.label}</div>
           </motion.div>
         ))}
       </div>
@@ -99,7 +99,7 @@ const Jobs = () => {
       <div className="card">
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search jobs..." className="input pl-10 w-full" />
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2">
@@ -113,19 +113,19 @@ const Jobs = () => {
 
         <div className="space-y-4">
           {filteredJobs.map((job, index) => (
-            <motion.div key={job._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="border border-gray-200 rounded-lg p-4 hover:border-secondary-300 transition">
+            <motion.div key={job._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="border border-slate-200 rounded-lg p-4 hover:border-primary-300 transition">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <span className={`badge ${job.status === 'open' ? 'bg-green-100 text-green-700' : job.status === 'in-progress' ? 'bg-blue-100 text-blue-700' : job.status === 'completed' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700'}`}>
+                    <span className={`badge ${job.status === 'open' ? 'bg-emerald-100 text-emerald-700' : job.status === 'in-progress' ? 'bg-primary-100 text-primary-700' : job.status === 'completed' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-700'}`}>
                       {job.status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                     </span>
-                    <span className="badge bg-gray-100 text-gray-700">{job.jobType}</span>
-                    {hasApplied(job) && <span className="badge bg-blue-100 text-blue-700">Applied</span>}
+                    <span className="badge bg-slate-100 text-slate-700">{job.jobType}</span>
+                    {hasApplied(job) && <span className="badge bg-primary-100 text-primary-700">Applied</span>}
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{job.title}</h3>
-                  <p className="text-gray-600 mb-3">{job.description?.substring(0, 100)}...</p>
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-1">{job.title}</h3>
+                  <p className="text-slate-600 mb-3">{job.description?.substring(0, 100)}...</p>
+                  <div className="flex flex-wrap gap-4 text-sm text-slate-500">
                     <span className="flex items-center gap-1"><FiMapPin className="w-4 h-4" />{formatLocation(job.location)}</span>
                     <span className="flex items-center gap-1"><FiDollarSign className="w-4 h-4" />{formatSalary(job)}</span>
                     <span className="flex items-center gap-1"><FiCalendar className="w-4 h-4" />Posted {new Date(job.createdAt).toLocaleDateString()}</span>
@@ -160,9 +160,9 @@ const Jobs = () => {
 
         {filteredJobs.length === 0 && !loading && (
           <div className="text-center py-12">
-            <FiBriefcase className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No jobs found</h3>
-            <p className="text-gray-600 mb-6">
+            <FiBriefcase className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">No jobs found</h3>
+            <p className="text-slate-600 mb-6">
               {searchTerm || filter !== 'all' 
                 ? 'Try adjusting your filters or search term' 
                 : 'Start browsing and applying for jobs'}

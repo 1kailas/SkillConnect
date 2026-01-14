@@ -36,15 +36,15 @@ const WorkerSearch = () => {
     <div className="py-12">
       <div className="container-custom">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">Find Skilled Workers</h1>
-          <p className="text-lg text-gray-600">Connect with {workers.length}+ verified professionals across Kerala</p>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">Find Skilled Workers</h1>
+          <p className="text-lg text-slate-600">Connect with {workers.length}+ verified professionals across Kerala</p>
         </div>
 
         {/* Search and Filter Bar */}
         <div className="card mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
               <input type="text" placeholder="Search workers..." value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} className="input pl-12 w-full" />
             </div>
             <button onClick={() => setShowFilters(!showFilters)} className="btn btn-outline md:w-auto">
@@ -84,7 +84,7 @@ const WorkerSearch = () => {
 
         {/* Results Count */}
         <div className="flex items-center justify-between mb-6">
-          <p className="text-gray-600">{filteredWorkers.length} workers found</p>
+          <p className="text-slate-600">{filteredWorkers.length} workers found</p>
           <select className="input w-auto">
             <option>Highest Rated</option>
             <option>Most Reviews</option>
@@ -102,24 +102,24 @@ const WorkerSearch = () => {
                   <div className="flex items-center gap-3">
                     <img src={worker.image} alt={worker.name} className="w-16 h-16 rounded-full" />
                     <div>
-                      <h3 className="font-heading font-bold text-gray-900">{worker.name}</h3>
-                      <p className="text-sm text-gray-600">{worker.profession}</p>
+                      <h3 className="font-heading font-bold text-slate-900">{worker.name}</h3>
+                      <p className="text-sm text-slate-600">{worker.profession}</p>
                     </div>
                   </div>
                   {worker.verified && (
-                    <div className="bg-green-100 text-green-700 p-1 rounded-full" title="Verified">
+                    <div className="bg-emerald-100 text-emerald-700 p-1 rounded-full" title="Verified">
                       <FiAward className="w-5 h-5" />
                     </div>
                   )}
                 </div>
 
                 <div className="flex items-center gap-4 mb-4 text-sm">
-                  <div className="flex items-center gap-1 text-yellow-600">
+                  <div className="flex items-center gap-1 text-amber-600">
                     <FiStar className="w-4 h-4 fill-current" />
                     <span className="font-semibold">{worker.rating}</span>
-                    <span className="text-gray-500">({worker.reviews})</span>
+                    <span className="text-slate-500">({worker.reviews})</span>
                   </div>
-                  <span className="flex items-center gap-1 text-gray-600">
+                  <span className="flex items-center gap-1 text-slate-600">
                     <FiMapPin className="w-4 h-4" />
                     {worker.location}
                   </span>
@@ -127,16 +127,16 @@ const WorkerSearch = () => {
 
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Experience</span>
+                    <span className="text-slate-600">Experience</span>
                     <span className="font-medium">{worker.experience}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Rate</span>
-                    <span className="font-medium text-secondary-600">{worker.hourlyRate}</span>
+                    <span className="text-slate-600">Rate</span>
+                    <span className="font-medium text-rose-600">{worker.hourlyRate}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Status</span>
-                    <span className={`font-medium ${worker.availability === 'Available' ? 'text-green-600' : 'text-orange-600'}`}>
+                    <span className="text-slate-600">Status</span>
+                    <span className={`font-medium ${worker.availability === 'Available' ? 'text-emerald-600' : 'text-orange-600'}`}>
                       {worker.availability}
                     </span>
                   </div>
@@ -158,9 +158,9 @@ const WorkerSearch = () => {
 
         {filteredWorkers.length === 0 && (
           <div className="text-center py-12">
-            <FiSearch className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No workers found</h3>
-            <p className="text-gray-600">Try adjusting your filters or search query</p>
+            <FiSearch className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">No workers found</h3>
+            <p className="text-slate-600">Try adjusting your filters or search query</p>
           </div>
         )}
       </div>

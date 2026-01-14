@@ -39,14 +39,14 @@ const Workers = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Find Workers</h1>
-        <p className="text-gray-600 mt-1">Discover skilled workers for your projects</p>
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Find Workers</h1>
+        <p className="text-slate-600 mt-1">Discover skilled workers for your projects</p>
       </div>
 
       <div className="card">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search workers..."
@@ -85,7 +85,7 @@ const Workers = () => {
         </div>
       </div>
 
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-slate-600">
         Showing {filteredWorkers.length} worker{filteredWorkers.length !== 1 ? 's' : ''}
       </div>
 
@@ -105,48 +105,48 @@ const Workers = () => {
               <div className="flex-1">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{worker.name}</h3>
-                    <p className="text-sm text-gray-600">{worker.profession}</p>
+                    <h3 className="text-lg font-semibold text-slate-900">{worker.name}</h3>
+                    <p className="text-sm text-slate-600">{worker.profession}</p>
                   </div>
                   {worker.verified && (
-                    <span className="badge bg-green-100 text-green-700 text-xs">Verified</span>
+                    <span className="badge bg-emerald-100 text-emerald-700 text-xs">Verified</span>
                   )}
                 </div>
               </div>
             </div>
 
             <div className="space-y-3 mb-4">
-              <div className="flex items-center gap-2 text-sm text-gray-700">
-                <FiMapPin className="w-4 h-4 text-gray-500" />
+              <div className="flex items-center gap-2 text-sm text-slate-700">
+                <FiMapPin className="w-4 h-4 text-slate-500" />
                 <span>{worker.location}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-700">
-                <FiBriefcase className="w-4 h-4 text-gray-500" />
+              <div className="flex items-center gap-2 text-sm text-slate-700">
+                <FiBriefcase className="w-4 h-4 text-slate-500" />
                 <span>{worker.experience} experience</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-yellow-500">
+                <div className="flex items-center gap-1 text-amber-500">
                   {Array.from({ length: 5 }, (_, i) => (
-                    <FiStar key={i} className={`w-4 h-4 ${i < Math.floor(worker.rating) ? 'fill-yellow-400' : ''}`} />
+                    <FiStar key={i} className={`w-4 h-4 ${i < Math.floor(worker.rating) ? 'fill-amber-400' : ''}`} />
                   ))}
                 </div>
-                <span className="text-sm font-medium text-gray-900">{worker.rating}</span>
-                <span className="text-sm text-gray-500">({worker.reviews})</span>
+                <span className="text-sm font-medium text-slate-900">{worker.rating}</span>
+                <span className="text-sm text-slate-500">({worker.reviews})</span>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-1 mb-4">
               {worker.skills.map((skill, idx) => (
-                <span key={idx} className="badge bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                <span key={idx} className="badge bg-slate-100 text-slate-700 text-xs">{skill}</span>
               ))}
             </div>
 
-            <div className="flex items-center justify-between mb-4 p-3 bg-green-50 rounded-lg">
+            <div className="flex items-center justify-between mb-4 p-3 bg-emerald-50 rounded-lg">
               <div>
-                <div className="text-xs text-green-700">Hourly Rate</div>
-                <div className="text-lg font-bold text-green-900">₹{worker.hourlyRate}</div>
+                <div className="text-xs text-emerald-700">Hourly Rate</div>
+                <div className="text-lg font-bold text-emerald-900">₹{worker.hourlyRate}</div>
               </div>
-              <span className={`badge ${worker.availability === 'Available' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+              <span className={`badge ${worker.availability === 'Available' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                 {worker.availability}
               </span>
             </div>
@@ -165,9 +165,9 @@ const Workers = () => {
 
       {filteredWorkers.length === 0 && (
         <div className="card text-center py-12">
-          <FiSearch className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No workers found</h3>
-          <p className="text-gray-600">Try adjusting your search filters</p>
+          <FiSearch className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">No workers found</h3>
+          <p className="text-slate-600">Try adjusting your search filters</p>
         </div>
       )}
     </div>

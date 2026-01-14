@@ -44,8 +44,8 @@ const Settings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">Manage your company account and preferences</p>
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Settings</h1>
+        <p className="text-slate-600 mt-1">Manage your company account and preferences</p>
       </div>
 
       <div className="grid md:grid-cols-4 gap-6">
@@ -60,7 +60,7 @@ const Settings = () => {
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
                     activeTab === tab.id
                       ? 'bg-primary-50 text-primary-700 font-medium'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      : 'text-slate-700 hover:bg-slate-50'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -74,7 +74,7 @@ const Settings = () => {
         <div className="md:col-span-3">
           {activeTab === 'account' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Company Information</h2>
+              <h2 className="text-xl font-semibold text-slate-900 mb-4">Company Information</h2>
               <form onSubmit={handleSaveAccount} className="space-y-4">
                 <div>
                   <label className="label">Company Email</label>
@@ -113,7 +113,7 @@ const Settings = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <input type="checkbox" id="hiring" className="w-4 h-4 text-primary-600" defaultChecked />
-                  <label htmlFor="hiring" className="text-sm text-gray-700">We are currently hiring</label>
+                  <label htmlFor="hiring" className="text-sm text-slate-700">We are currently hiring</label>
                 </div>
                 <button type="submit" className="btn btn-primary">
                   <FiSave /> Save Changes
@@ -124,7 +124,7 @@ const Settings = () => {
 
           {activeTab === 'password' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Change Password</h2>
+              <h2 className="text-xl font-semibold text-slate-900 mb-4">Change Password</h2>
               <form onSubmit={handleChangePassword} className="space-y-4">
                 <div>
                   <label className="label">Current Password</label>
@@ -138,9 +138,9 @@ const Settings = () => {
                   <label className="label">Confirm New Password</label>
                   <input type="password" className="input" required />
                 </div>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-medium text-blue-900 mb-2">Password Requirements:</h3>
-                  <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+                <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+                  <h3 className="font-medium text-primary-900 mb-2">Password Requirements:</h3>
+                  <ul className="text-sm text-primary-800 space-y-1 list-disc list-inside">
                     <li>At least 8 characters long</li>
                     <li>Contains uppercase and lowercase letters</li>
                     <li>Contains at least one number</li>
@@ -156,10 +156,10 @@ const Settings = () => {
 
           {activeTab === 'notifications' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Notification Preferences</h2>
+              <h2 className="text-xl font-semibold text-slate-900 mb-4">Notification Preferences</h2>
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">Email Notifications</h3>
+                  <h3 className="font-medium text-slate-900 mb-3">Email Notifications</h3>
                   <div className="space-y-3">
                     {[
                       { key: 'emailApplications', label: 'New job applications' },
@@ -167,7 +167,7 @@ const Settings = () => {
                       { key: 'emailReviews', label: 'New company reviews' },
                     ].map((item) => (
                       <div key={item.key} className="flex items-center justify-between">
-                        <label className="text-sm text-gray-700">{item.label}</label>
+                        <label className="text-sm text-slate-700">{item.label}</label>
                         <input
                           type="checkbox"
                           checked={notifications[item.key]}
@@ -179,14 +179,14 @@ const Settings = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">Push Notifications</h3>
+                  <h3 className="font-medium text-slate-900 mb-3">Push Notifications</h3>
                   <div className="space-y-3">
                     {[
                       { key: 'pushApplications', label: 'New applications' },
                       { key: 'pushMessages', label: 'Messages' },
                     ].map((item) => (
                       <div key={item.key} className="flex items-center justify-between">
-                        <label className="text-sm text-gray-700">{item.label}</label>
+                        <label className="text-sm text-slate-700">{item.label}</label>
                         <input
                           type="checkbox"
                           checked={notifications[item.key]}
@@ -198,9 +198,9 @@ const Settings = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">SMS Notifications</h3>
+                  <h3 className="font-medium text-slate-900 mb-3">SMS Notifications</h3>
                   <div className="flex items-center justify-between">
-                    <label className="text-sm text-gray-700">Important updates only</label>
+                    <label className="text-sm text-slate-700">Important updates only</label>
                     <input
                       type="checkbox"
                       checked={notifications.smsImportant}
@@ -219,39 +219,39 @@ const Settings = () => {
           {activeTab === 'privacy' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
               <div className="card">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Privacy Settings</h2>
+                <h2 className="text-xl font-semibold text-slate-900 mb-4">Privacy Settings</h2>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">Company Profile Visibility</h3>
-                      <p className="text-sm text-gray-600">Make your company profile visible to workers</p>
+                      <h3 className="font-medium text-slate-900">Company Profile Visibility</h3>
+                      <p className="text-sm text-slate-600">Make your company profile visible to workers</p>
                     </div>
                     <input type="checkbox" className="w-4 h-4 text-primary-600" defaultChecked />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">Show Contact Information</h3>
-                      <p className="text-sm text-gray-600">Display phone and email on public profile</p>
+                      <h3 className="font-medium text-slate-900">Show Contact Information</h3>
+                      <p className="text-sm text-slate-600">Display phone and email on public profile</p>
                     </div>
                     <input type="checkbox" className="w-4 h-4 text-primary-600" defaultChecked />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">Show Hiring Status</h3>
-                      <p className="text-sm text-gray-600">Display if company is actively hiring</p>
+                      <h3 className="font-medium text-slate-900">Show Hiring Status</h3>
+                      <p className="text-sm text-slate-600">Display if company is actively hiring</p>
                     </div>
                     <input type="checkbox" className="w-4 h-4 text-primary-600" defaultChecked />
                   </div>
                 </div>
               </div>
 
-              <div className="card border-2 border-red-200 bg-red-50">
-                <h2 className="text-xl font-semibold text-red-900 mb-4">Danger Zone</h2>
+              <div className="card border-2 border-rose-200 bg-rose-50">
+                <h2 className="text-xl font-semibold text-rose-900 mb-4">Danger Zone</h2>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-medium text-red-900">Delete Company Account</h3>
-                    <p className="text-sm text-red-700 mb-3">Once you delete your account, there is no going back. All your job postings and data will be permanently deleted.</p>
-                    <button onClick={handleDeleteAccount} className="btn bg-red-600 hover:bg-red-700 text-white">
+                    <h3 className="font-medium text-rose-900">Delete Company Account</h3>
+                    <p className="text-sm text-rose-700 mb-3">Once you delete your account, there is no going back. All your job postings and data will be permanently deleted.</p>
+                    <button onClick={handleDeleteAccount} className="btn bg-rose-600 hover:bg-rose-700 text-white">
                       <FiTrash2 /> Delete Company Account
                     </button>
                   </div>

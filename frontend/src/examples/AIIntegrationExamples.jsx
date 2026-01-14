@@ -45,12 +45,12 @@ export const WorkerDashboardAIExample = () => {
             {jobRecommendations.map((job, idx) => (
               <div key={idx} className="border rounded-lg p-4">
                 <h3 className="font-semibold">{job.jobType}</h3>
-                <p className="text-sm text-gray-600 mt-1">{job.reasoning}</p>
+                <p className="text-sm text-slate-600 mt-1">{job.reasoning}</p>
                 <div className="mt-2 flex gap-4 text-sm">
-                  <span className="text-green-600">
+                  <span className="text-emerald-600">
                     Match: {job.skillMatch}%
                   </span>
-                  <span className="text-blue-600">
+                  <span className="text-primary-600">
                     Demand: {job.marketDemand}
                   </span>
                   <span className="text-purple-600">
@@ -77,13 +77,13 @@ export const WorkerDashboardAIExample = () => {
 
           {recommendedSkills.length > 0 && (
             <div className="mt-4 space-y-2">
-              <p className="text-sm text-gray-600">Top skills to learn:</p>
+              <p className="text-sm text-slate-600">Top skills to learn:</p>
               {recommendedSkills.map((skill, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm">
+                  <span className="w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-sm">
                     {idx + 1}
                   </span>
-                  <span className="text-gray-700">{skill}</span>
+                  <span className="text-slate-700">{skill}</span>
                 </div>
               ))}
             </div>
@@ -135,7 +135,7 @@ export const EmployerJobCreationAIExample = () => {
       <form className="space-y-6">
         {/* Job Title with AI Enhancement */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 mb-2">
             Job Title
           </label>
           <div className="flex gap-2">
@@ -156,7 +156,7 @@ export const EmployerJobCreationAIExample = () => {
 
         {/* Job Description with AI Enhancement */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 mb-2">
             Job Description
           </label>
           <textarea
@@ -177,7 +177,7 @@ export const EmployerJobCreationAIExample = () => {
 
         {/* Company Description with AI Enhancement */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 mb-2">
             Company Description
           </label>
           <textarea
@@ -198,7 +198,7 @@ export const EmployerJobCreationAIExample = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+          className="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700"
         >
           Create Job Posting
         </button>
@@ -219,11 +219,11 @@ export const EmployerApplicationsAIExample = ({ jobId }) => {
       <h1 className="text-2xl font-bold">Job Applications</h1>
 
       {/* AI Worker Recommendations */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow p-6">
+      <div className="bg-gradient-to-r from-primary-50 to-purple-50 rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">
           🤖 AI-Recommended Workers
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="text-slate-600 mb-4">
           Our AI has analyzed available workers and ranked them based on their
           match with your job requirements.
         </p>
@@ -239,7 +239,7 @@ export const EmployerApplicationsAIExample = ({ jobId }) => {
         {/* Display AI-matched workers */}
         {aiMatches.length > 0 && (
           <div className="mt-6 space-y-4">
-            <h3 className="font-semibold text-gray-800">
+            <h3 className="font-semibold text-slate-800">
               Top {aiMatches.length} Candidates:
             </h3>
             {/* Workers will be displayed by the AIWorkerMatcher component */}
@@ -269,7 +269,7 @@ export const WorkerProfileEnhancementExample = ({ worker, onUpdate }) => {
 
       {/* Bio with AI Enhancement */}
       <div className="bg-white rounded-lg shadow p-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-slate-700 mb-2">
           Professional Bio
         </label>
         <textarea
@@ -287,7 +287,7 @@ export const WorkerProfileEnhancementExample = ({ worker, onUpdate }) => {
           />
           <button
             onClick={() => onUpdate({ bio })}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
           >
             Save Bio
           </button>

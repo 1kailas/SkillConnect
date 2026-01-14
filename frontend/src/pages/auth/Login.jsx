@@ -24,12 +24,12 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8">
+    <div className="p-8 md:p-10">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-heading font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-heading font-bold text-slate-900 mb-2">
           Welcome Back
         </h2>
-        <p className="text-gray-600">Login to your SkillConnect account</p>
+        <p className="text-slate-500">Sign in to continue to your dashboard</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -37,7 +37,7 @@ const Login = () => {
         <div>
           <label className="label">Email Address</label>
           <div className="relative">
-            <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="email"
               {...register('email', {
@@ -52,7 +52,7 @@ const Login = () => {
             />
           </div>
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
@@ -60,7 +60,7 @@ const Login = () => {
         <div>
           <label className="label">Password</label>
           <div className="relative">
-            <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="password"
               {...register('password', {
@@ -71,7 +71,7 @@ const Login = () => {
             />
           </div>
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
 
@@ -79,7 +79,7 @@ const Login = () => {
         <div className="text-right">
           <Link
             to="/auth/forgot-password"
-            className="text-secondary-500 hover:text-secondary-600 text-sm font-medium"
+            className="text-primary-600 hover:text-primary-700 text-sm font-semibold transition-colors"
           >
             Forgot Password?
           </Link>
@@ -104,11 +104,11 @@ const Login = () => {
 
       {/* Sign Up Link */}
       <div className="mt-6 text-center">
-        <p className="text-gray-600">
+        <p className="text-slate-600">
           Don't have an account?{' '}
           <Link
             to="/auth/signup"
-            className="text-secondary-500 hover:text-secondary-600 font-medium"
+            className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
           >
             Sign Up
           </Link>
@@ -119,7 +119,7 @@ const Login = () => {
       <div className="mt-4 text-center">
         <Link
           to="/"
-          className="text-gray-500 hover:text-gray-700 text-sm"
+          className="text-slate-400 hover:text-slate-600 text-sm transition-colors"
         >
           ← Back to Home
         </Link>

@@ -39,17 +39,17 @@ const Jobs = () => {
   });
 
   const stats = [
-    { label: 'Total Jobs', value: jobs.length, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    { label: 'Active', value: jobs.filter(j => j.status === 'active').length, color: 'text-green-600', bgColor: 'bg-green-50' },
+    { label: 'Total Jobs', value: jobs.length, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    { label: 'Active', value: jobs.filter(j => j.status === 'active').length, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
     { label: 'Total Applicants', value: jobs.reduce((sum, j) => sum + j.applicants, 0), color: 'text-purple-600', bgColor: 'bg-purple-50' },
   ];
 
   const statusConfig = {
-    open: { label: 'Open', color: 'bg-green-100 text-green-700' },
-    'in-progress': { label: 'In Progress', color: 'bg-blue-100 text-blue-700' },
+    open: { label: 'Open', color: 'bg-emerald-100 text-emerald-700' },
+    'in-progress': { label: 'In Progress', color: 'bg-primary-100 text-primary-700' },
     completed: { label: 'Completed', color: 'bg-purple-100 text-purple-700' },
-    cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
-    closed: { label: 'Closed', color: 'bg-gray-100 text-gray-700' },
+    cancelled: { label: 'Cancelled', color: 'bg-rose-100 text-rose-700' },
+    closed: { label: 'Closed', color: 'bg-slate-100 text-slate-700' },
   };
 
   const handleDelete = async (jobId) => {
@@ -88,8 +88,8 @@ const Jobs = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Manage Jobs</h1>
-          <p className="text-gray-600 mt-1">View and manage all your job postings</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Manage Jobs</h1>
+          <p className="text-slate-600 mt-1">View and manage all your job postings</p>
         </div>
         <Link to="/employer/jobs/create" className="btn btn-primary w-full sm:w-auto">
           <FiPlus /> Post New Job
@@ -102,8 +102,8 @@ const Jobs = () => {
             <div className={`w-12 h-12 rounded-lg ${stat.bgColor} flex items-center justify-center mb-3`}>
               <FiBriefcase className={`w-6 h-6 ${stat.color}`} />
             </div>
-            <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-            <div className="text-sm text-gray-600">{stat.label}</div>
+            <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+            <div className="text-sm text-slate-600">{stat.label}</div>
           </motion.div>
         ))}
       </div>
@@ -125,7 +125,7 @@ const Jobs = () => {
                 className={`px-4 py-2 rounded-lg font-medium transition capitalize ${
                   filterStatus === status
                     ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 {status}
@@ -150,8 +150,8 @@ const Jobs = () => {
                   <FiBriefcase className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{job.title}</h3>
-                  <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-1">{job.title}</h3>
+                  <div className="flex flex-wrap gap-2 text-sm text-slate-600">
                     <span>{job.category}</span>
                     <span>•</span>
                     <span>{formatLocation(job.location)}</span>
@@ -164,12 +164,12 @@ const Jobs = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <div className="flex items-center gap-2 text-blue-600 mb-1">
+              <div className="bg-primary-50 p-3 rounded-lg">
+                <div className="flex items-center gap-2 text-primary-600 mb-1">
                   <FiUsers className="w-4 h-4" />
                   <span className="font-medium">Applicants</span>
                 </div>
-                <div className="text-xl font-bold text-blue-900">{job.applicants?.length || 0}</div>
+                <div className="text-xl font-bold text-primary-900">{job.applicants?.length || 0}</div>
               </div>
               <div className="bg-purple-50 p-3 rounded-lg">
                 <div className="flex items-center gap-2 text-purple-600 mb-1">
@@ -180,7 +180,7 @@ const Jobs = () => {
               </div>
             </div>
 
-            <div className="space-y-2 text-sm text-gray-600 mb-4">
+            <div className="space-y-2 text-sm text-slate-600 mb-4">
               <p><span className="font-medium">Type:</span> {job.jobType}</p>
               <p><span className="font-medium">Salary:</span> {formatSalary(job)}</p>
             </div>
@@ -192,7 +192,7 @@ const Jobs = () => {
               <Link to={`/dashboard/employer/jobs/${job._id}/edit`} className="btn btn-outline text-sm">
                 <FiEdit2 />
               </Link>
-              <button onClick={() => handleDelete(job._id)} className="btn btn-outline text-red-600 hover:text-red-700 hover:border-red-600 text-sm">
+              <button onClick={() => handleDelete(job._id)} className="btn btn-outline text-rose-600 hover:text-rose-700 hover:border-rose-600 text-sm">
                 <FiTrash2 />
               </button>
             </div>
@@ -202,9 +202,9 @@ const Jobs = () => {
 
       {filteredJobs.length === 0 && !loading && (
         <div className="card text-center py-12">
-          <FiBriefcase className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No jobs found</h3>
-          <p className="text-gray-600 mb-4">
+          <FiBriefcase className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">No jobs found</h3>
+          <p className="text-slate-600 mb-4">
             {searchTerm || filterStatus !== 'all' 
               ? 'Try adjusting your filters or search term' 
               : 'Get started by posting your first job'}

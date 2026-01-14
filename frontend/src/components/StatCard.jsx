@@ -4,28 +4,33 @@ const StatCard = ({ icon: Icon, label, value, trend, color = 'primary' }) => {
   const colors = {
     primary: {
       bg: 'bg-primary-50',
-      text: 'text-primary-600',
-      icon: 'text-primary-500',
+      text: 'text-primary-700',
+      icon: 'text-primary-600',
+      border: 'border-primary-100',
     },
     secondary: {
-      bg: 'bg-secondary-50',
-      text: 'text-secondary-600',
-      icon: 'text-secondary-500',
+      bg: 'bg-rose-50',
+      text: 'text-rose-700',
+      icon: 'text-rose-600',
+      border: 'border-rose-100',
     },
     success: {
-      bg: 'bg-green-50',
-      text: 'text-green-600',
-      icon: 'text-green-500',
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-700',
+      icon: 'text-emerald-600',
+      border: 'border-emerald-100',
     },
     warning: {
-      bg: 'bg-yellow-50',
-      text: 'text-yellow-600',
-      icon: 'text-yellow-500',
+      bg: 'bg-amber-50',
+      text: 'text-amber-700',
+      icon: 'text-amber-600',
+      border: 'border-amber-100',
     },
     danger: {
-      bg: 'bg-red-50',
-      text: 'text-red-600',
-      icon: 'text-red-500',
+      bg: 'bg-rose-50',
+      text: 'text-rose-700',
+      icon: 'text-rose-600',
+      border: 'border-rose-100',
     },
   };
 
@@ -35,16 +40,16 @@ const StatCard = ({ icon: Icon, label, value, trend, color = 'primary' }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      className="card cursor-pointer"
+      whileHover={{ y: -4, scale: 1.02 }}
+      className={`card cursor-pointer border ${colorScheme.border} hover:shadow-xl transition-all duration-300`}
     >
       <div className="flex items-start justify-between">
-        <div className={`w-12 h-12 rounded-lg ${colorScheme.bg} flex items-center justify-center`}>
-          <Icon className={`w-6 h-6 ${colorScheme.icon}`} />
+        <div className={`w-14 h-14 rounded-xl ${colorScheme.bg} flex items-center justify-center shadow-sm`}>
+          <Icon className={`w-7 h-7 ${colorScheme.icon}`} />
         </div>
         {trend && (
-          <div className={`flex items-center gap-1 text-sm font-medium ${
-            trend.type === 'up' ? 'text-green-600' : 'text-red-600'
+          <div className={`flex items-center gap-1 text-sm font-semibold ${
+            trend.type === 'up' ? 'text-emerald-600' : 'text-rose-600'
           }`}>
             <span>{trend.type === 'up' ? '↑' : '↓'}</span>
             <span>{trend.value}%</span>
@@ -53,7 +58,7 @@ const StatCard = ({ icon: Icon, label, value, trend, color = 'primary' }) => {
       </div>
       <div className="mt-4">
         <div className={`text-3xl font-bold ${colorScheme.text}`}>{value}</div>
-        <div className="text-sm text-gray-600 mt-1">{label}</div>
+        <div className="text-sm text-slate-600 mt-1">{label}</div>
       </div>
     </motion.div>
   );

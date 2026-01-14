@@ -67,8 +67,8 @@ const Profile = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Company Profile</h1>
-          <p className="text-gray-600 mt-1">Manage your company information and branding</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Company Profile</h1>
+          <p className="text-slate-600 mt-1">Manage your company information and branding</p>
         </div>
         {!isEditing ? (
           <button onClick={() => setIsEditing(true)} className="btn btn-primary w-full sm:w-auto">
@@ -106,9 +106,9 @@ const Profile = () => {
                   className="input text-2xl font-bold mb-2"
                 />
               ) : (
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">{profile.companyName}</h2>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">{profile.companyName}</h2>
               )}
-              <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+              <div className="flex flex-wrap gap-3 text-sm text-slate-600">
                 <span className="flex items-center gap-1"><FiBriefcase /> {profile.industry}</span>
                 <span className="flex items-center gap-1"><FiMapPin /> {typeof profile.location === 'string' ? profile.location : profile.location?.address || profile.location?.city || 'N/A'}</span>
                 <span className="flex items-center gap-1"><FiUsers /> {profile.companySize} employees</span>
@@ -127,7 +127,7 @@ const Profile = () => {
                   rows="4"
                 />
               ) : (
-                <p className="text-gray-700 leading-relaxed">{profile.description}</p>
+                <p className="text-slate-700 leading-relaxed">{profile.description}</p>
               )}
             </div>
 
@@ -142,7 +142,7 @@ const Profile = () => {
                     className="input"
                   />
                 ) : (
-                  <p className="text-gray-900">{profile.email}</p>
+                  <p className="text-slate-900">{profile.email}</p>
                 )}
               </div>
               <div>
@@ -155,7 +155,7 @@ const Profile = () => {
                     className="input"
                   />
                 ) : (
-                  <p className="text-gray-900">{profile.phone}</p>
+                  <p className="text-slate-900">{profile.phone}</p>
                 )}
               </div>
               <div>
@@ -174,7 +174,7 @@ const Profile = () => {
                     <option>Other</option>
                   </select>
                 ) : (
-                  <p className="text-gray-900">{profile.industry}</p>
+                  <p className="text-slate-900">{profile.industry}</p>
                 )}
               </div>
               <div>
@@ -192,7 +192,7 @@ const Profile = () => {
                     <option>500+</option>
                   </select>
                 ) : (
-                  <p className="text-gray-900">{profile.companySize} employees</p>
+                  <p className="text-slate-900">{profile.companySize} employees</p>
                 )}
               </div>
               <div>
@@ -205,7 +205,7 @@ const Profile = () => {
                     className="input"
                   />
                 ) : (
-                  <p className="text-gray-900">{profile.location}</p>
+                  <p className="text-slate-900">{profile.location}</p>
                 )}
               </div>
               <div>
@@ -233,8 +233,8 @@ const Profile = () => {
             return (
               <div key={index} className="card text-center">
                 <Icon className="w-8 h-8 mx-auto text-primary-600 mb-2" />
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
+                <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
+                <div className="text-sm text-slate-600">{stat.label}</div>
               </div>
             );
           })}

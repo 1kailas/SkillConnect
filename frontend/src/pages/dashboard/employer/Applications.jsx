@@ -21,10 +21,10 @@ const Applications = () => {
     : applications.filter(app => app.status === filterStatus);
 
   const statusConfig = {
-    pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-700' },
-    shortlisted: { label: 'Shortlisted', color: 'bg-blue-100 text-blue-700' },
-    accepted: { label: 'Accepted', color: 'bg-green-100 text-green-700' },
-    rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700' },
+    pending: { label: 'Pending', color: 'bg-amber-100 text-amber-700' },
+    shortlisted: { label: 'Shortlisted', color: 'bg-primary-100 text-primary-700' },
+    accepted: { label: 'Accepted', color: 'bg-emerald-100 text-emerald-700' },
+    rejected: { label: 'Rejected', color: 'bg-rose-100 text-rose-700' },
   };
 
   const handleAccept = (appId) => {
@@ -43,17 +43,17 @@ const Applications = () => {
   };
 
   const stats = [
-    { label: 'Total Applications', value: applications.length, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    { label: 'Pending Review', value: applications.filter(a => a.status === 'pending').length, color: 'text-yellow-600', bgColor: 'bg-yellow-50' },
-    { label: 'Shortlisted', value: applications.filter(a => a.status === 'shortlisted').length, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    { label: 'Accepted', value: applications.filter(a => a.status === 'accepted').length, color: 'text-green-600', bgColor: 'bg-green-50' },
+    { label: 'Total Applications', value: applications.length, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    { label: 'Pending Review', value: applications.filter(a => a.status === 'pending').length, color: 'text-amber-600', bgColor: 'bg-amber-50' },
+    { label: 'Shortlisted', value: applications.filter(a => a.status === 'shortlisted').length, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    { label: 'Accepted', value: applications.filter(a => a.status === 'accepted').length, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Job Applications</h1>
-        <p className="text-gray-600 mt-1">Review and manage worker applications</p>
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Job Applications</h1>
+        <p className="text-slate-600 mt-1">Review and manage worker applications</p>
       </div>
 
       <div className="grid md:grid-cols-4 gap-4">
@@ -62,8 +62,8 @@ const Applications = () => {
             <div className={`w-12 h-12 rounded-lg ${stat.bgColor} flex items-center justify-center mb-3`}>
               <FiUsers className={`w-6 h-6 ${stat.color}`} />
             </div>
-            <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-            <div className="text-sm text-gray-600">{stat.label}</div>
+            <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+            <div className="text-sm text-slate-600">{stat.label}</div>
           </motion.div>
         ))}
       </div>
@@ -77,7 +77,7 @@ const Applications = () => {
               className={`px-4 py-2 rounded-lg font-medium transition capitalize ${
                 filterStatus === status
                   ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               {status}
@@ -103,35 +103,35 @@ const Applications = () => {
                 <div className="flex-1">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-1">{app.worker}</h3>
-                      <p className="text-gray-600">{app.profession} • {app.experience} experience</p>
+                      <h3 className="text-xl font-semibold text-slate-900 mb-1">{app.worker}</h3>
+                      <p className="text-slate-600">{app.profession} • {app.experience} experience</p>
                     </div>
                     <span className={`badge ${statusConfig[app.status].color} self-start`}>
                       {statusConfig[app.status].label}
                     </span>
                   </div>
 
-                  <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded mb-4">
-                    <p className="text-sm font-medium text-blue-900">Applied for: {app.job}</p>
-                    <p className="text-xs text-blue-700 mt-1">Submitted {app.applied}</p>
+                  <div className="bg-primary-50 border-l-4 border-primary-500 p-3 rounded mb-4">
+                    <p className="text-sm font-medium text-primary-900">Applied for: {app.job}</p>
+                    <p className="text-xs text-primary-700 mt-1">Submitted {app.applied}</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-3 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <FiMapPin className="w-4 h-4 text-gray-500" />
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <FiMapPin className="w-4 h-4 text-slate-500" />
                       <span>{app.location}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <FiStar className="w-4 h-4 text-yellow-500" />
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <FiStar className="w-4 h-4 text-amber-500" />
                       <span className="font-medium">{app.rating}</span>
-                      <span className="text-gray-500">({app.totalReviews} reviews)</span>
+                      <span className="text-slate-500">({app.totalReviews} reviews)</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <FiPhone className="w-4 h-4 text-gray-500" />
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <FiPhone className="w-4 h-4 text-slate-500" />
                       <span>{app.phone}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <FiMail className="w-4 h-4 text-gray-500" />
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <FiMail className="w-4 h-4 text-slate-500" />
                       <span>{app.email}</span>
                     </div>
                   </div>
@@ -145,26 +145,26 @@ const Applications = () => {
                         <button onClick={() => handleShortlist(app.id)} className="btn btn-outline text-sm">
                           <FiCalendar /> Shortlist
                         </button>
-                        <button onClick={() => handleAccept(app.id)} className="btn bg-green-600 hover:bg-green-700 text-white text-sm">
+                        <button onClick={() => handleAccept(app.id)} className="btn bg-emerald-600 hover:bg-emerald-700 text-white text-sm">
                           <FiCheck /> Accept
                         </button>
-                        <button onClick={() => handleReject(app.id)} className="btn bg-red-600 hover:bg-red-700 text-white text-sm">
+                        <button onClick={() => handleReject(app.id)} className="btn bg-rose-600 hover:bg-rose-700 text-white text-sm">
                           <FiX /> Reject
                         </button>
                       </>
                     )}
                     {app.status === 'shortlisted' && (
                       <>
-                        <button onClick={() => handleAccept(app.id)} className="btn bg-green-600 hover:bg-green-700 text-white text-sm">
+                        <button onClick={() => handleAccept(app.id)} className="btn bg-emerald-600 hover:bg-emerald-700 text-white text-sm">
                           <FiCheck /> Accept
                         </button>
-                        <button onClick={() => handleReject(app.id)} className="btn bg-red-600 hover:bg-red-700 text-white text-sm">
+                        <button onClick={() => handleReject(app.id)} className="btn bg-rose-600 hover:bg-rose-700 text-white text-sm">
                           <FiX /> Reject
                         </button>
                       </>
                     )}
                     {app.status === 'accepted' && (
-                      <button className="btn bg-green-600 text-white text-sm cursor-not-allowed" disabled>
+                      <button className="btn bg-emerald-600 text-white text-sm cursor-not-allowed" disabled>
                         <FiCheck /> Hired
                       </button>
                     )}
@@ -178,9 +178,9 @@ const Applications = () => {
 
       {filteredApplications.length === 0 && (
         <div className="card text-center py-12">
-          <FiUsers className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No applications found</h3>
-          <p className="text-gray-600">Try selecting a different filter</p>
+          <FiUsers className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">No applications found</h3>
+          <p className="text-slate-600">Try selecting a different filter</p>
         </div>
       )}
     </div>

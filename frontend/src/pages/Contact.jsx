@@ -28,8 +28,8 @@ const Contact = () => {
     <div className="py-12">
       <div className="container-custom">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-4">Get In Touch</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+          <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-4">Get In Touch</h1>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
@@ -37,14 +37,14 @@ const Contact = () => {
             const Icon = info.icon;
             return (
               <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="card text-center">
-                <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Icon className="w-8 h-8 text-secondary-600" />
+                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon className="w-8 h-8 text-primary-600" />
                 </div>
-                <h3 className="text-lg font-heading font-bold text-gray-900 mb-2">{info.title}</h3>
+                <h3 className="text-lg font-heading font-bold text-slate-900 mb-2">{info.title}</h3>
                 {info.link ? (
-                  <a href={info.link} className="text-gray-600 hover:text-secondary-600 transition">{info.content}</a>
+                  <a href={info.link} className="text-slate-600 hover:text-primary-600 transition">{info.content}</a>
                 ) : (
-                  <p className="text-gray-600">{info.content}</p>
+                  <p className="text-slate-600">{info.content}</p>
                 )}
               </motion.div>
             );
@@ -54,7 +54,7 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <div className="card">
-              <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">Send us a Message</h2>
+              <h2 className="text-2xl font-heading font-bold text-slate-900 mb-6">Send us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="label">Name *</label>
@@ -87,27 +87,27 @@ const Contact = () => {
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
             <div className="card h-full">
-              <h2 className="text-2xl font-heading font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              <h2 className="text-2xl font-heading font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">How do I register as a worker?</h3>
-                  <p className="text-gray-600">Click "Sign Up" and select "I'm a Worker". Fill in your details, add your skills and certificates to get started.</p>
+                  <h3 className="font-semibold text-slate-900 mb-2">How do I register as a worker?</h3>
+                  <p className="text-slate-600">Click "Sign Up" and select "I'm a Worker". Fill in your details, add your skills and certificates to get started.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Is there any registration fee?</h3>
-                  <p className="text-gray-600">No! Registration is completely free for both workers and employers.</p>
+                  <h3 className="font-semibold text-slate-900 mb-2">Is there any registration fee?</h3>
+                  <p className="text-slate-600">No! Registration is completely free for both workers and employers.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">How is certificate verification done?</h3>
-                  <p className="text-gray-600">We use AI-powered verification to authenticate certificates. Verified certificates appear with a badge on profiles.</p>
+                  <h3 className="font-semibold text-slate-900 mb-2">How is certificate verification done?</h3>
+                  <p className="text-slate-600">We use AI-powered verification to authenticate certificates. Verified certificates appear with a badge on profiles.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">How do I contact a worker?</h3>
-                  <p className="text-gray-600">Once you create an employer account, you can directly message workers through our platform's messaging system.</p>
+                  <h3 className="font-semibold text-slate-900 mb-2">How do I contact a worker?</h3>
+                  <p className="text-slate-600">Once you create an employer account, you can directly message workers through our platform's messaging system.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">What areas do you cover?</h3>
-                  <p className="text-gray-600">We currently serve Tier 3 cities across Kerala including Kottayam, Alappuzha, Kollam, Pathanamthitta, and Idukki.</p>
+                  <h3 className="font-semibold text-slate-900 mb-2">What areas do you cover?</h3>
+                  <p className="text-slate-600">We currently serve Tier 3 cities across Kerala including Kottayam, Alappuzha, Kollam, Pathanamthitta, and Idukki.</p>
                 </div>
               </div>
             </div>

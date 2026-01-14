@@ -41,6 +41,8 @@ const Profile = () => {
 
   // Populate form data when profileUser changes
   useEffect(() => {
+    console.log('Profile User Data:', profileUser);
+    
     const skills = Array.isArray(profileUser?.skills)
       ? profileUser.skills.join(', ')
       : typeof profileUser?.skills === 'string'
@@ -52,35 +54,47 @@ const Profile = () => {
       ? profileUser.location 
       : profileUser?.location?.address || profileUser?.location?.city || '';
 
-    setFormData({
+    const formValues = {
       name: profileUser?.name || '',
       email: profileUser?.email || '',
       phone: profileUser?.phone || '',
       profession: profileUser?.profession || '',
       location,
-      experience: profileUser?.experience || '',
-      hourlyRate: profileUser?.hourlyRate || '',
+      experience: profileUser?.experience?.toString() || '',
+      hourlyRate: profileUser?.hourlyRate?.toString() || '',
       bio: profileUser?.bio || '',
       skills,
-    });
+    };
+    
+    console.log('Setting form data:', formValues);
+    setFormData(formValues);
   }, [profileUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const updatedData = { ...formData, skills: formData.skills.split(',').map(s => s.trim()) };
+      // Convert skills to array if it's a string
+      const skills = Array.isArray(formData.skills) 
+        ? formData.skills 
+        : formData.skills.split(',').map(s => s.trim()).filter(s => s);
+      
+      const updatedData = { ...formData, skills };
+      
       if (user) {
-        await updateProfile(updatedData);
+        console.log('Submitting profile update:', updatedData);
+        const updated = await updateProfile(updatedData);
+        console.log('Profile updated successfully:', updated);
+        setIsEditing(false);
       } else {
         // Mock update for development
         console.log('Mock update:', updatedData);
         toast.success('Profile updated (mock mode)');
+        setIsEditing(false);
       }
-      setIsEditing(false);
-      toast.success('Profile updated successfully!');
     } catch (error) {
-      toast.error('Failed to update profile');
+      console.error('Profile update error:', error);
+      toast.error(error.message || 'Failed to update profile');
     } finally {
       setLoading(false);
     }
@@ -90,8 +104,8 @@ const Profile = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">My Profile</h1>
-          <p className="text-gray-600 mt-1">Manage your personal information</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">My Profile</h1>
+          <p className="text-slate-600 mt-1">Manage your personal information</p>
         </div>
         {!isEditing && (
           <button onClick={() => setIsEditing(true)} className="btn btn-primary w-full sm:w-auto">
@@ -106,9 +120,9 @@ const Profile = () => {
             <div className="w-32 h-32 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white text-5xl font-bold mx-auto mb-4">
               {profileUser?.name?.charAt(0) || 'W'}
             </div>
-            <h2 className="text-xl font-heading font-bold text-gray-900">{profileUser?.name}</h2>
-            <p className="text-gray-600">{profileUser?.profession || 'Worker'}</p>
-            <div className="flex items-center justify-center gap-2 mt-2 text-sm text-gray-500">
+            <h2 className="text-xl font-heading font-bold text-slate-900">{profileUser?.name}</h2>
+            <p className="text-slate-600">{profileUser?.profession || 'Worker'}</p>
+            <div className="flex items-center justify-center gap-2 mt-2 text-sm text-slate-500">
               <FiMapPin className="w-4 h-4" />
               {typeof profileUser?.location === 'string' 
                 ? profileUser.location 
@@ -116,16 +130,16 @@ const Profile = () => {
             </div>
             <div className="mt-6 pt-6 border-t space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Member Since</span>
+                <span className="text-slate-600">Member Since</span>
                 <span className="font-medium">Jan 2024</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Profile Views</span>
+                <span className="text-slate-600">Profile Views</span>
                 <span className="font-medium">234</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Response Rate</span>
-                <span className="font-medium text-green-600">95%</span>
+                <span className="text-slate-600">Response Rate</span>
+                <span className="font-medium text-emerald-600">95%</span>
               </div>
             </div>
           </div>
@@ -134,7 +148,7 @@ const Profile = () => {
         <div className="card lg:col-span-2">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-heading font-bold text-gray-900">Personal Information</h3>
+              <h3 className="text-xl font-heading font-bold text-slate-900">Personal Information</h3>
               {isEditing && (
                 <div className="flex gap-2">
                   <button type="button" onClick={() => setIsEditing(false)} className="btn btn-outline text-sm">
@@ -151,14 +165,14 @@ const Profile = () => {
               <div>
                 <label className="label">Full Name *</label>
                 <div className="relative">
-                  <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} disabled={!isEditing} className="input pl-10" required />
                 </div>
               </div>
               <div>
                 <label className="label">Profession *</label>
                 <div className="relative">
-                  <FiBriefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiBriefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <input type="text" value={formData.profession} onChange={(e) => setFormData({...formData, profession: e.target.value})} disabled={!isEditing} className="input pl-10" placeholder="e.g., Electrician" required />
                 </div>
               </div>
@@ -168,14 +182,14 @@ const Profile = () => {
               <div>
                 <label className="label">Email *</label>
                 <div className="relative">
-                  <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} disabled={!isEditing} className="input pl-10" required />
                 </div>
               </div>
               <div>
                 <label className="label">Phone *</label>
                 <div className="relative">
-                  <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} disabled={!isEditing} className="input pl-10" required />
                 </div>
               </div>
@@ -185,7 +199,7 @@ const Profile = () => {
               <div>
                 <label className="label">Location *</label>
                 <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                   <input type="text" value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} disabled={!isEditing} className="input pl-10" placeholder="e.g., Kottayam" required />
                 </div>
               </div>
@@ -224,10 +238,15 @@ const Profile = () => {
 
       {/* AI Career Development Section */}
       {!isEditing && (
-        <div className="lg:col-span-3 space-y-6">
+        <>
           {/* AI Skill Recommendations */}
-          <div className="card bg-gradient-to-br from-blue-50 to-purple-50">
-            <h2 className="text-xl font-heading font-bold mb-4">💡 AI Skill Recommendations</h2>
+          <div className="card bg-gradient-to-br from-primary-50 to-violet-50 border border-primary-200">
+            <div className="mb-4">
+              <h2 className="text-xl font-heading font-bold text-slate-900 mb-2">💡 AI Skill Recommendations</h2>
+              <p className="text-slate-600 text-sm">
+                Discover trending skills that can boost your career based on your current expertise
+              </p>
+            </div>
             <AISkillRecommender
               currentProfession={profileUser?.profession}
               currentSkills={Array.isArray(profileUser?.skills) ? profileUser.skills : []}
@@ -238,8 +257,13 @@ const Profile = () => {
           </div>
 
           {/* AI Skill Gap Analysis */}
-          <div className="card">
-            <h2 className="text-xl font-heading font-bold mb-4">📊 Career Development Path</h2>
+          <div className="card bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-heading font-bold text-slate-900">📊 Career Development Path</h2>
+            </div>
+            <p className="text-slate-600 mb-4 text-sm">
+              Analyze gaps between your current skills and your career goals
+            </p>
             <AISkillGapAnalyzer
               currentSkills={Array.isArray(profileUser?.skills) ? profileUser.skills : []}
               targetProfession={`Senior ${profileUser?.profession || 'Professional'}`}
@@ -247,8 +271,13 @@ const Profile = () => {
           </div>
 
           {/* AI Salary Estimator */}
-          <div className="card">
-            <h2 className="text-xl font-heading font-bold mb-4">💰 Market Value Analysis</h2>
+          <div className="card bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200">
+            <div className="mb-4">
+              <h2 className="text-xl font-heading font-bold text-slate-900 mb-2">💰 Market Value Analysis</h2>
+              <p className="text-slate-600 text-sm">
+                Get AI-powered salary estimates based on your skills, experience, and location
+              </p>
+            </div>
             <AISalaryEstimator
               profession={profileUser?.profession}
               skills={Array.isArray(profileUser?.skills) ? profileUser.skills : []}
@@ -256,7 +285,7 @@ const Profile = () => {
               location={typeof profileUser?.location === 'string' ? profileUser.location : profileUser?.location?.city}
             />
           </div>
-        </div>
+        </>
       )}
     </div>
   );

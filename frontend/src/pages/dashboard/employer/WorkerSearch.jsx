@@ -153,8 +153,8 @@ const WorkerSearch = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Find Workers</h1>
-          <p className="text-gray-600 mt-1">Search skilled workers near you</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Find Workers</h1>
+          <p className="text-slate-600 mt-1">Search skilled workers near you</p>
         </div>
         <button
           onClick={getUserLocation}
@@ -169,7 +169,7 @@ const WorkerSearch = () => {
         {/* Filters */}
         <div className="lg:col-span-1">
           <div className="card space-y-4">
-            <div className="flex items-center gap-2 text-gray-900 font-semibold">
+            <div className="flex items-center gap-2 text-slate-900 font-semibold">
               <FiFilter />
               <h3>Filters</h3>
             </div>
@@ -235,7 +235,7 @@ const WorkerSearch = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Map */}
           <div className="card">
-            <h3 className="font-semibold text-gray-900 mb-4">Workers Near You</h3>
+            <h3 className="font-semibold text-slate-900 mb-4">Workers Near You</h3>
             <LocationMap
               center={mapCenter}
               zoom={10}
@@ -267,33 +267,33 @@ const WorkerSearch = () => {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="font-heading font-bold text-gray-900 text-lg">
+                          <h3 className="font-heading font-bold text-slate-900 text-lg">
                             {worker.name}
                           </h3>
                           <p className="text-primary-600 font-medium">{worker.profession}</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-gray-900">
+                          <div className="text-2xl font-bold text-slate-900">
                             ₹{worker.hourlyRate}
                           </div>
-                          <div className="text-sm text-gray-600">per hour</div>
+                          <div className="text-sm text-slate-600">per hour</div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-4 mt-2 text-sm">
                         <div className="flex items-center gap-1">
-                          <span className="text-yellow-500">⭐</span>
+                          <span className="text-amber-500">⭐</span>
                           <span className="font-medium">{worker.rating}</span>
-                          <span className="text-gray-600">({worker.reviews})</span>
+                          <span className="text-slate-600">({worker.reviews})</span>
                         </div>
-                        <div className="flex items-center gap-1 text-gray-600">
+                        <div className="flex items-center gap-1 text-slate-600">
                           <FiMapPin className="w-4 h-4" />
                           {worker.location.city}
                         </div>
                         <div className={`px-2 py-1 rounded text-xs font-medium ${
                           worker.available 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-gray-100 text-gray-700'
+                            ? 'bg-emerald-100 text-emerald-700' 
+                            : 'bg-slate-100 text-slate-700'
                         }`}>
                           {worker.available ? 'Available' : 'Busy'}
                         </div>
@@ -303,7 +303,7 @@ const WorkerSearch = () => {
                         {worker.skills.map((skill, idx) => (
                           <span
                             key={idx}
-                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                            className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs"
                           >
                             {skill}
                           </span>

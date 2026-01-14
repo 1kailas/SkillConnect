@@ -42,17 +42,17 @@ const AISkillRecommender = ({ currentProfession, currentSkills = [], onSkillsRec
     <button
       onClick={getRecommendations}
       disabled={loading}
-      className="btn btn-secondary flex items-center gap-2 text-sm"
+      className="btn btn-primary w-full sm:w-auto"
     >
       {loading ? (
         <>
-          <FiLoader className="w-4 h-4 animate-spin" />
+          <FiLoader className="w-5 h-5 animate-spin" />
           Getting suggestions...
         </>
       ) : (
         <>
-          <FiZap className="w-4 h-4" />
-          AI Skill Suggestions
+          <FiZap className="w-5 h-5" />
+          Get AI Skill Suggestions
         </>
       )}
     </button>

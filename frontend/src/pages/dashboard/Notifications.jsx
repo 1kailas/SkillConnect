@@ -6,14 +6,14 @@ import toast from 'react-hot-toast';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([
-    { id: 1, type: 'application', title: 'Application Accepted', message: 'Your application for "Electrician for Villa Project" has been accepted!', time: '5 min ago', read: false, icon: FiCheck, color: 'text-green-600', bgColor: 'bg-green-50' },
-    { id: 2, type: 'message', title: 'New Message', message: 'Tech Solutions sent you a message', time: '15 min ago', read: false, icon: FiMessageSquare, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    { id: 3, type: 'job', title: 'New Job Match', message: 'New job posting matches your profile: "Plumber - Urgent"', time: '1 hour ago', read: false, icon: FiBriefcase, color: 'text-purple-600', bgColor: 'bg-purple-50' },
-    { id: 4, type: 'review', title: 'New Review', message: 'You received a 5-star review from Ramesh Kumar', time: '3 hours ago', read: true, icon: FiStar, color: 'text-yellow-600', bgColor: 'bg-yellow-50' },
-    { id: 5, type: 'verification', title: 'Certificate Verified', message: 'Your ITI Electrician Certificate has been verified', time: '5 hours ago', read: true, icon: FiUserCheck, color: 'text-green-600', bgColor: 'bg-green-50' },
-    { id: 6, type: 'application', title: 'Application Status', message: 'Your application for "Carpenter" position is under review', time: 'Yesterday', read: true, icon: FiBriefcase, color: 'text-blue-600', bgColor: 'bg-blue-50' },
-    { id: 7, type: 'alert', title: 'Profile Incomplete', message: 'Complete your profile to get more job opportunities', time: '2 days ago', read: true, icon: FiAlertCircle, color: 'text-orange-600', bgColor: 'bg-orange-50' },
-    { id: 8, type: 'message', title: 'New Message', message: 'ABC Constructions sent you a message', time: '3 days ago', read: true, icon: FiMessageSquare, color: 'text-blue-600', bgColor: 'bg-blue-50' },
+    { id: 1, type: 'application', title: 'Application Accepted', message: 'Your application for "Electrician for Villa Project" has been accepted!', time: '5 min ago', read: false, icon: FiCheck, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { id: 2, type: 'message', title: 'New Message', message: 'Tech Solutions sent you a message', time: '15 min ago', read: false, icon: FiMessageSquare, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    { id: 3, type: 'job', title: 'New Job Match', message: 'New job posting matches your profile: "Plumber - Urgent"', time: '1 hour ago', read: false, icon: FiBriefcase, color: 'text-violet-600', bgColor: 'bg-violet-50' },
+    { id: 4, type: 'review', title: 'New Review', message: 'You received a 5-star review from Ramesh Kumar', time: '3 hours ago', read: true, icon: FiStar, color: 'text-amber-600', bgColor: 'bg-amber-50' },
+    { id: 5, type: 'verification', title: 'Certificate Verified', message: 'Your ITI Electrician Certificate has been verified', time: '5 hours ago', read: true, icon: FiUserCheck, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    { id: 6, type: 'application', title: 'Application Status', message: 'Your application for "Carpenter" position is under review', time: 'Yesterday', read: true, icon: FiBriefcase, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    { id: 7, type: 'alert', title: 'Profile Incomplete', message: 'Complete your profile to get more job opportunities', time: '2 days ago', read: true, icon: FiAlertCircle, color: 'text-rose-600', bgColor: 'bg-rose-50' },
+    { id: 8, type: 'message', title: 'New Message', message: 'ABC Constructions sent you a message', time: '3 days ago', read: true, icon: FiMessageSquare, color: 'text-primary-600', bgColor: 'bg-primary-50' },
   ]);
 
   const [filter, setFilter] = useState('all');
@@ -44,8 +44,8 @@ const Notifications = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Notifications</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Notifications</h1>
+          <p className="text-slate-600 mt-1">
             {unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'All caught up!'}
           </p>
         </div>
@@ -65,7 +65,7 @@ const Notifications = () => {
               className={`px-4 py-2 rounded-lg font-medium transition capitalize ${
                 filter === f
                   ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               {f}
@@ -77,9 +77,9 @@ const Notifications = () => {
       <div className="space-y-3">
         {filteredNotifications.length === 0 ? (
           <div className="card text-center py-12">
-            <FiBell className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No notifications</h3>
-            <p className="text-gray-600">You're all caught up! Check back later for new updates.</p>
+            <FiBell className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">No notifications</h3>
+            <p className="text-slate-600">You're all caught up! Check back later for new updates.</p>
           </div>
         ) : (
           filteredNotifications.map((notif, index) => {
@@ -100,7 +100,7 @@ const Notifications = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-900">{notif.title}</h3>
+                      <h3 className="font-semibold text-slate-900">{notif.title}</h3>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {!notif.read && (
                           <button
@@ -113,16 +113,16 @@ const Notifications = () => {
                         )}
                         <button
                           onClick={() => deleteNotification(notif.id)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-rose-600 hover:text-rose-700"
                           title="Delete"
                         >
                           <FiX className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
-                    <p className="text-gray-700 mb-2">{notif.message}</p>
+                    <p className="text-slate-700 mb-2">{notif.message}</p>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">{notif.time}</span>
+                      <span className="text-sm text-slate-500">{notif.time}</span>
                       {(notif.type === 'application' || notif.type === 'job') && (
                         <Link to="/worker/jobs" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
                           View Details →

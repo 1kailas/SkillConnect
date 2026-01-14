@@ -11,12 +11,12 @@ const LoadingSpinner = ({ size = 'md', text = 'Loading...' }) => {
   return (
     <div className="flex flex-col items-center justify-center p-8">
       <motion.div
-        className={`${sizes[size]} border-4 border-primary-200 border-t-primary-600 rounded-full`}
+        className={`${sizes[size]} border-4 border-primary-100 border-t-primary-600 rounded-full`}
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
       />
       {text && (
-        <p className="mt-4 text-gray-600 text-sm">{text}</p>
+        <p className="mt-4 text-slate-600 text-sm font-medium">{text}</p>
       )}
     </div>
   );

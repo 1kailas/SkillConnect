@@ -28,31 +28,31 @@ const Reviews = () => {
 
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <FiStar key={i} className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+      <FiStar key={i} className={`w-4 h-4 ${i < rating ? 'fill-amber-400 text-amber-400' : 'text-slate-300'}`} />
     ));
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Company Reviews</h1>
-        <p className="text-gray-600 mt-1">See what workers say about your company</p>
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Company Reviews</h1>
+        <p className="text-slate-600 mt-1">See what workers say about your company</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-4">
         {stats.map((stat, index) => (
           <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="card text-center">
             <div className="text-4xl font-bold text-primary-600 mb-2">{stat.value}</div>
-            <div className="text-sm font-medium text-gray-900">{stat.label}</div>
-            <div className="text-xs text-gray-500 mt-1">{stat.subtext}</div>
+            <div className="text-sm font-medium text-slate-900">{stat.label}</div>
+            <div className="text-xs text-slate-500 mt-1">{stat.subtext}</div>
           </motion.div>
         ))}
       </div>
 
       <div className="card">
         <div className="flex items-center gap-3 mb-4">
-          <FiFilter className="text-gray-500" />
-          <span className="font-medium text-gray-700">Filter by rating:</span>
+          <FiFilter className="text-slate-500" />
+          <span className="font-medium text-slate-700">Filter by rating:</span>
           <div className="flex gap-2 flex-wrap">
             {['All', '5', '4', '3'].map(rating => (
               <button
@@ -61,7 +61,7 @@ const Reviews = () => {
                 className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
                   filterRating === rating
                     ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 {rating === 'All' ? 'All' : `${rating} Stars`}
@@ -69,7 +69,7 @@ const Reviews = () => {
             ))}
           </div>
         </div>
-        <p className="text-sm text-gray-600">Showing {filteredReviews.length} review{filteredReviews.length !== 1 ? 's' : ''}</p>
+        <p className="text-sm text-slate-600">Showing {filteredReviews.length} review{filteredReviews.length !== 1 ? 's' : ''}</p>
       </div>
 
       <div className="space-y-4">
@@ -87,21 +87,21 @@ const Reviews = () => {
                   {review.worker.charAt(0)}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{review.worker}</h3>
-                  <p className="text-sm text-gray-600">{review.profession}</p>
-                  <p className="text-xs text-gray-500 mt-1">{review.date}</p>
+                  <h3 className="font-semibold text-slate-900">{review.worker}</h3>
+                  <p className="text-sm text-slate-600">{review.profession}</p>
+                  <p className="text-xs text-slate-500 mt-1">{review.date}</p>
                 </div>
               </div>
               <div className="flex gap-1">
                 {renderStars(review.rating)}
               </div>
             </div>
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded mb-3">
-              <p className="text-xs font-medium text-blue-900 mb-1">Job: {review.job}</p>
+            <div className="bg-primary-50 border-l-4 border-primary-500 p-3 rounded mb-3">
+              <p className="text-xs font-medium text-primary-900 mb-1">Job: {review.job}</p>
             </div>
-            <p className="text-gray-700 leading-relaxed mb-4">{review.comment}</p>
+            <p className="text-slate-700 leading-relaxed mb-4">{review.comment}</p>
             <div className="flex items-center gap-4 text-sm">
-              <button className="flex items-center gap-1 text-gray-600 hover:text-primary-600 transition">
+              <button className="flex items-center gap-1 text-slate-600 hover:text-primary-600 transition">
                 <FiThumbsUp className="w-4 h-4" />
                 <span>Helpful ({review.helpful})</span>
               </button>
@@ -112,9 +112,9 @@ const Reviews = () => {
 
       {filteredReviews.length === 0 && (
         <div className="card text-center py-12">
-          <FiStar className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No reviews found</h3>
-          <p className="text-gray-600">No reviews match your selected filter</p>
+          <FiStar className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">No reviews found</h3>
+          <p className="text-slate-600">No reviews match your selected filter</p>
         </div>
       )}
     </div>

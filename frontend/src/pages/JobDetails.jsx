@@ -58,7 +58,7 @@ const JobDetails = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Link to="/jobs" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
+      <Link to="/jobs" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6">
         <FiArrowLeft /> Back to Jobs
       </Link>
 
@@ -70,60 +70,60 @@ const JobDetails = () => {
                 {job.company.charAt(0)}
               </div>
               <div className="flex-1">
-                <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-2">{job.title}</h1>
+                <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900 mb-2">{job.title}</h1>
                 <div className="flex items-center gap-2 mb-2">
-                  <h2 className="text-lg text-gray-700 font-medium">{job.company}</h2>
-                  <div className="flex items-center gap-1 text-yellow-500">
-                    <FiStar className="w-4 h-4 fill-yellow-400" />
-                    <span className="text-sm font-medium text-gray-900">{job.companyRating}</span>
+                  <h2 className="text-lg text-slate-700 font-medium">{job.company}</h2>
+                  <div className="flex items-center gap-1 text-amber-500">
+                    <FiStar className="w-4 h-4 fill-amber-400" />
+                    <span className="text-sm font-medium text-slate-900">{job.companyRating}</span>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <span className="badge bg-primary-100 text-primary-700">{job.category}</span>
-                  <span className="badge bg-gray-100 text-gray-700">{job.type}</span>
+                  <span className="badge bg-slate-100 text-slate-700">{job.type}</span>
                 </div>
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center gap-3 text-gray-700">
-                <FiMapPin className="w-5 h-5 text-gray-500" />
+              <div className="flex items-center gap-3 text-slate-700">
+                <FiMapPin className="w-5 h-5 text-slate-500" />
                 <span>{job.location}</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-700">
-                <FiDollarSign className="w-5 h-5 text-gray-500" />
+              <div className="flex items-center gap-3 text-slate-700">
+                <FiDollarSign className="w-5 h-5 text-slate-500" />
                 <span className="font-medium">{job.salary}</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-700">
-                <FiClock className="w-5 h-5 text-gray-500" />
+              <div className="flex items-center gap-3 text-slate-700">
+                <FiClock className="w-5 h-5 text-slate-500" />
                 <span>Duration: {job.duration}</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-700">
-                <FiCalendar className="w-5 h-5 text-gray-500" />
+              <div className="flex items-center gap-3 text-slate-700">
+                <FiCalendar className="w-5 h-5 text-slate-500" />
                 <span>Start: {job.startDate}</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-700">
-                <FiUsers className="w-5 h-5 text-gray-500" />
+              <div className="flex items-center gap-3 text-slate-700">
+                <FiUsers className="w-5 h-5 text-slate-500" />
                 <span>{job.applicants} applicants</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-700">
-                <FiBriefcase className="w-5 h-5 text-gray-500" />
+              <div className="flex items-center gap-3 text-slate-700">
+                <FiBriefcase className="w-5 h-5 text-slate-500" />
                 <span>{job.experience} experience</span>
               </div>
             </div>
 
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Job Description</h3>
-                <p className="text-gray-700 leading-relaxed">{job.description}</p>
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">Job Description</h3>
+                <p className="text-slate-700 leading-relaxed">{job.description}</p>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Requirements</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">Requirements</h3>
                 <ul className="space-y-2">
                   {job.requirements.map((req, index) => (
-                    <li key={index} className="flex items-start gap-2 text-gray-700">
-                      <FiCheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <li key={index} className="flex items-start gap-2 text-slate-700">
+                      <FiCheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                       <span>{req}</span>
                     </li>
                   ))}
@@ -131,20 +131,20 @@ const JobDetails = () => {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Required Skills</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">Required Skills</h3>
                 <div className="flex flex-wrap gap-2">
                   {job.skills.map((skill, index) => (
-                    <span key={index} className="badge bg-blue-100 text-blue-700">{skill}</span>
+                    <span key={index} className="badge bg-primary-100 text-primary-700">{skill}</span>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Benefits</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">Benefits</h3>
                 <ul className="space-y-2">
                   {job.benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-2 text-gray-700">
-                      <FiCheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <li key={index} className="flex items-start gap-2 text-slate-700">
+                      <FiCheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                       <span>{benefit}</span>
                     </li>
                   ))}
@@ -164,21 +164,21 @@ const JobDetails = () => {
             </button>
 
             <div className="pt-4 border-t space-y-3">
-              <h3 className="font-semibold text-gray-900">Company Information</h3>
+              <h3 className="font-semibold text-slate-900">Company Information</h3>
               <div className="space-y-2 text-sm">
-                <p className="text-gray-700"><span className="font-medium">Industry:</span> {job.companyInfo.industry}</p>
-                <p className="text-gray-700"><span className="font-medium">Company Size:</span> {job.companyInfo.employees} employees</p>
+                <p className="text-slate-700"><span className="font-medium">Industry:</span> {job.companyInfo.industry}</p>
+                <p className="text-slate-700"><span className="font-medium">Company Size:</span> {job.companyInfo.employees} employees</p>
               </div>
               <div className="space-y-2">
-                <a href={`tel:${job.companyInfo.phone}`} className="flex items-center gap-2 text-gray-700 hover:text-primary-600 transition">
+                <a href={`tel:${job.companyInfo.phone}`} className="flex items-center gap-2 text-slate-700 hover:text-primary-600 transition">
                   <FiPhone className="w-4 h-4" />
                   <span className="text-sm">{job.companyInfo.phone}</span>
                 </a>
-                <a href={`mailto:${job.companyInfo.email}`} className="flex items-center gap-2 text-gray-700 hover:text-primary-600 transition">
+                <a href={`mailto:${job.companyInfo.email}`} className="flex items-center gap-2 text-slate-700 hover:text-primary-600 transition">
                   <FiMail className="w-4 h-4" />
                   <span className="text-sm">{job.companyInfo.email}</span>
                 </a>
-                <a href={job.companyInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-700 hover:text-primary-600 transition">
+                <a href={job.companyInfo.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-700 hover:text-primary-600 transition">
                   <FiGlobe className="w-4 h-4" />
                   <span className="text-sm">Visit Website</span>
                 </a>
@@ -186,8 +186,8 @@ const JobDetails = () => {
             </div>
 
             <div className="pt-4 border-t">
-              <p className="text-xs text-gray-500">Posted {job.posted}</p>
-              <p className="text-xs text-gray-500 mt-1">{job.views} views • {job.applicants} applicants</p>
+              <p className="text-xs text-slate-500">Posted {job.posted}</p>
+              <p className="text-xs text-slate-500 mt-1">{job.views} views • {job.applicants} applicants</p>
             </div>
           </motion.div>
         </div>
@@ -196,7 +196,7 @@ const JobDetails = () => {
       {showApplyModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl p-6 max-w-md w-full">
-            <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">Apply for this Job</h2>
+            <h2 className="text-2xl font-heading font-bold text-slate-900 mb-4">Apply for this Job</h2>
             <form onSubmit={handleApply} className="space-y-4">
               <div>
                 <label className="label">Cover Letter *</label>

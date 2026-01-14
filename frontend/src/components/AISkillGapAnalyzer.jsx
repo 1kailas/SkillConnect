@@ -39,9 +39,9 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
 
   const getPriorityColor = (priority) => {
     const colors = {
-      high: 'bg-red-100 text-red-800 border-red-300',
-      medium: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      low: 'bg-blue-100 text-blue-800 border-blue-300'
+      high: 'bg-rose-100 text-rose-800 border-rose-300',
+      medium: 'bg-amber-100 text-amber-800 border-amber-300',
+      low: 'bg-primary-100 text-primary-800 border-primary-300'
     };
     return colors[priority] || colors.medium;
   };
@@ -51,7 +51,7 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
       <button
         onClick={analyzeGap}
         disabled={loading}
-        className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-all"
+        className="btn btn-primary w-full sm:w-auto"
       >
         {loading ? (
           <>
@@ -72,9 +72,9 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-white rounded-lg p-6 shadow-md border border-gray-200"
+            className="bg-white rounded-xl p-6 shadow-lg border border-slate-200 mt-4"
           >
-            <h3 className="text-lg font-bold text-gray-800 mb-4">
+            <h3 className="text-lg font-bold text-slate-800 mb-4">
               Skill Gap Analysis for {targetProfession}
             </h3>
 
@@ -82,14 +82,14 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
             {analysis.strengthSkills && analysis.strengthSkills.length > 0 && (
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <FiCheckCircle className="w-5 h-5 text-green-600" />
-                  <h4 className="font-semibold text-gray-800">Your Strengths</h4>
+                  <FiCheckCircle className="w-5 h-5 text-emerald-600" />
+                  <h4 className="font-semibold text-slate-800">Your Strengths</h4>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {analysis.strengthSkills.map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+                      className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm"
                     >
                       {skill}
                     </span>
@@ -103,7 +103,7 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
                   <FiAlertCircle className="w-5 h-5 text-orange-600" />
-                  <h4 className="font-semibold text-gray-800">Skills to Develop</h4>
+                  <h4 className="font-semibold text-slate-800">Skills to Develop</h4>
                 </div>
                 <div className="space-y-3">
                   {analysis.missingSkills.map((skillObj, idx) => {
@@ -144,9 +144,9 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
             {/* Development Plan */}
             {analysis.developmentPlan && (
               <div className="mb-4">
-                <h4 className="font-semibold text-gray-800 mb-2">Development Plan</h4>
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-700 whitespace-pre-line">
+                <h4 className="font-semibold text-slate-800 mb-2">Development Plan</h4>
+                <div className="bg-primary-50 rounded-lg p-4">
+                  <p className="text-sm text-slate-700 whitespace-pre-line">
                     {analysis.developmentPlan}
                   </p>
                 </div>
@@ -156,8 +156,8 @@ const AISkillGapAnalyzer = ({ currentSkills = [], targetProfession }) => {
             {/* Market Outlook */}
             {analysis.marketOutlook && (
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4">
-                <h4 className="font-semibold text-gray-800 mb-2">Market Outlook</h4>
-                <p className="text-sm text-gray-700">{analysis.marketOutlook}</p>
+                <h4 className="font-semibold text-slate-800 mb-2">Market Outlook</h4>
+                <p className="text-sm text-slate-700">{analysis.marketOutlook}</p>
               </div>
             )}
           </motion.div>

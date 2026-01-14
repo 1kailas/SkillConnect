@@ -34,10 +34,10 @@ const WorkerDashboard = () => {
   }, []);
 
   const statCards = [
-    { title: 'Active Applications', value: stats.activeApplications, icon: FiFileText, color: 'text-blue-600', bgColor: 'bg-blue-50', link: '/dashboard/worker/applications' },
-    { title: 'Completed Jobs', value: stats.completedJobs, icon: FiBriefcase, color: 'text-green-600', bgColor: 'bg-green-50', link: '/dashboard/worker/jobs' },
-    { title: 'Total Earnings', value: `₹${stats.totalEarnings.toLocaleString()}`, icon: FiDollarSign, color: 'text-secondary-600', bgColor: 'bg-secondary-50' },
-    { title: 'Average Rating', value: stats.averageRating, icon: FiStar, color: 'text-yellow-600', bgColor: 'bg-yellow-50', link: '/dashboard/worker/reviews' },
+    { title: 'Active Applications', value: stats.activeApplications, icon: FiFileText, color: 'text-primary-600', bgColor: 'bg-primary-50', link: '/dashboard/worker/applications' },
+    { title: 'Completed Jobs', value: stats.completedJobs, icon: FiBriefcase, color: 'text-emerald-600', bgColor: 'bg-emerald-50', link: '/dashboard/worker/jobs' },
+    { title: 'Total Earnings', value: `₹${stats.totalEarnings.toLocaleString()}`, icon: FiDollarSign, color: 'text-rose-600', bgColor: 'bg-rose-50' },
+    { title: 'Average Rating', value: stats.averageRating, icon: FiStar, color: 'text-amber-600', bgColor: 'bg-amber-50', link: '/dashboard/worker/reviews' },
   ];
 
   return (
@@ -48,7 +48,7 @@ const WorkerDashboard = () => {
             <h1 className="text-2xl md:text-3xl font-heading font-bold mb-2">Welcome back, {user?.name}!</h1>
             <p className="text-primary-100">Here's your dashboard overview for today</p>
           </div>
-          <Link to="/jobs" className="btn bg-white text-primary-700 hover:bg-gray-100 w-full md:w-auto">
+          <Link to="/jobs" className="btn bg-white text-primary-700 hover:bg-slate-100 w-full md:w-auto">
             <FiTrendingUp /> Browse Jobs
           </Link>
         </div>
@@ -63,8 +63,8 @@ const WorkerDashboard = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-lg ${stat.bgColor}`}><Icon className={`w-6 h-6 ${stat.color}`} /></div>
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600">{stat.title}</div>
+                <div className="text-2xl md:text-3xl font-bold text-slate-900 mb-1">{stat.value}</div>
+                <div className="text-sm text-slate-600">{stat.title}</div>
               </Link>
             </motion.div>
           );
@@ -72,14 +72,14 @@ const WorkerDashboard = () => {
       </div>
 
       {/* AI Job Recommendations Section */}
-      <div className="card bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
+      <div className="card bg-gradient-to-br from-primary-50 to-violet-50 border-2 border-primary-200">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-purple-600 text-white rounded-lg">
-            <FiTrendingUp className="w-5 h-5" />
+          <div className="p-3 bg-primary-600 text-white rounded-xl shadow-lg">
+            <FiTrendingUp className="w-6 h-6" />
           </div>
-          <div>
-            <h2 className="text-xl font-heading font-bold text-gray-900">AI Job Recommendations</h2>
-            <p className="text-sm text-gray-600">Get personalized job matches powered by AI</p>
+          <div className="flex-1">
+            <h2 className="text-xl font-heading font-bold text-slate-900">🤖 AI Job Recommendations</h2>
+            <p className="text-sm text-slate-600">Get personalized job matches powered by AI</p>
           </div>
         </div>
         
@@ -92,17 +92,20 @@ const WorkerDashboard = () => {
 
         {aiRecommendations.length > 0 && (
           <div className="mt-6 space-y-3">
-            <h3 className="font-semibold text-gray-800">Top Recommendations:</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-slate-900">Top Recommendations:</h3>
+              <span className="text-xs text-slate-500">{aiRecommendations.length} matches found</span>
+            </div>
             {aiRecommendations.slice(0, 3).map((rec, idx) => (
-              <div key={idx} className="bg-white rounded-lg p-4 border border-purple-200">
+              <div key={idx} className="bg-white rounded-xl p-4 border border-primary-200 hover:border-primary-300 transition-all hover:shadow-md">
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-semibold text-gray-900">{rec.jobType}</h4>
-                  <span className="badge bg-green-100 text-green-700">{rec.skillMatch}% Match</span>
+                  <h4 className="font-semibold text-slate-900">{rec.jobType}</h4>
+                  <span className="badge bg-emerald-50 text-emerald-700 ring-emerald-600/20">{rec.skillMatch}% Match</span>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{rec.reasoning}</p>
+                <p className="text-sm text-slate-600 mb-3">{rec.reasoning}</p>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">{rec.marketDemand} Demand</span>
-                  <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded">{rec.estimatedSalary}</span>
+                  <span className="px-2.5 py-1 bg-primary-100 text-primary-700 rounded-full font-medium">{rec.marketDemand} Demand</span>
+                  <span className="px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full font-medium">{rec.estimatedSalary}</span>
                 </div>
               </div>
             ))}
@@ -114,19 +117,19 @@ const WorkerDashboard = () => {
         <div className="card">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-heading font-bold">Upcoming Jobs</h2>
-            <Link to="/dashboard/worker/jobs" className="text-secondary-500 hover:text-secondary-600 text-sm font-medium">View All</Link>
+            <Link to="/dashboard/worker/jobs" className="text-primary-600 hover:text-rose-600 text-sm font-medium">View All</Link>
           </div>
           <div className="space-y-4">
             {upcomingJobs.map((job) => (
-              <div key={job.id} className="p-4 border border-gray-200 rounded-lg hover:border-secondary-300 transition">
+              <div key={job.id} className="p-4 border border-slate-200 rounded-lg hover:border-primary-300 transition">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
                   <div>
-                    <h3 className="font-semibold text-gray-900">{job.title}</h3>
-                    <p className="text-sm text-gray-600">{job.company}</p>
+                    <h3 className="font-semibold text-slate-900">{job.title}</h3>
+                    <p className="text-sm text-slate-600">{job.company}</p>
                   </div>
-                  <span className="badge bg-green-100 text-green-700 w-fit">{job.payment}</span>
+                  <span className="badge bg-emerald-100 text-emerald-700 w-fit">{job.payment}</span>
                 </div>
-                <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
                   <span className="flex items-center gap-1"><FiMapPin className="w-4 h-4" />{job.location}</span>
                   <span className="flex items-center gap-1"><FiCalendar className="w-4 h-4" />{job.date}</span>
                 </div>
@@ -144,9 +147,9 @@ const WorkerDashboard = () => {
                 <div key={activity.id} className="flex items-start gap-4">
                   <div className="p-2 bg-primary-50 rounded-lg flex-shrink-0"><Icon className="w-5 h-5 text-primary-600" /></div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{activity.title}</p>
-                    <p className="text-sm text-gray-600 truncate">{activity.company}</p>
-                    <p className="text-xs text-gray-500 mt-1">{activity.date}</p>
+                    <p className="font-medium text-slate-900 truncate">{activity.title}</p>
+                    <p className="text-sm text-slate-600 truncate">{activity.company}</p>
+                    <p className="text-xs text-slate-500 mt-1">{activity.date}</p>
                   </div>
                 </div>
               );
@@ -158,20 +161,20 @@ const WorkerDashboard = () => {
       <div className="card">
         <h2 className="text-xl font-heading font-bold mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          <Link to="/dashboard/worker/profile" className="p-4 border-2 border-gray-200 rounded-lg hover:border-secondary-300 hover:bg-secondary-50 transition text-center">
-            <FiFileText className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-secondary-500" />
+          <Link to="/dashboard/worker/profile" className="p-4 border-2 border-slate-200 rounded-lg hover:border-primary-300 hover:bg-rose-50 transition text-center">
+            <FiFileText className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-primary-600" />
             <span className="text-xs md:text-sm font-medium">Update Profile</span>
           </Link>
-          <Link to="/dashboard/worker/certificates" className="p-4 border-2 border-gray-200 rounded-lg hover:border-secondary-300 hover:bg-secondary-50 transition text-center">
-            <FiAward className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-secondary-500" />
+          <Link to="/dashboard/worker/certificates" className="p-4 border-2 border-slate-200 rounded-lg hover:border-primary-300 hover:bg-rose-50 transition text-center">
+            <FiAward className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-primary-600" />
             <span className="text-xs md:text-sm font-medium">Add Certificate</span>
           </Link>
-          <Link to="/jobs" className="p-4 border-2 border-gray-200 rounded-lg hover:border-secondary-300 hover:bg-secondary-50 transition text-center">
-            <FiBriefcase className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-secondary-500" />
+          <Link to="/jobs" className="p-4 border-2 border-slate-200 rounded-lg hover:border-primary-300 hover:bg-rose-50 transition text-center">
+            <FiBriefcase className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-primary-600" />
             <span className="text-xs md:text-sm font-medium">Find Jobs</span>
           </Link>
-          <Link to="/dashboard/messages" className="p-4 border-2 border-gray-200 rounded-lg hover:border-secondary-300 hover:bg-secondary-50 transition text-center">
-            <FiFileText className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-secondary-500" />
+          <Link to="/dashboard/messages" className="p-4 border-2 border-slate-200 rounded-lg hover:border-primary-300 hover:bg-rose-50 transition text-center">
+            <FiFileText className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2 text-primary-600" />
             <span className="text-xs md:text-sm font-medium">Messages</span>
           </Link>
         </div>

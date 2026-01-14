@@ -81,8 +81,8 @@ const Pricing = () => {
     <div className="py-12">
       <div className="container-custom">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">Choose the plan that's right for you. No hidden fees, cancel anytime.</p>
+          <h1 className="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-4">Simple, Transparent Pricing</h1>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">Choose the plan that's right for you. No hidden fees, cancel anytime.</p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-20 max-w-5xl mx-auto">
@@ -92,34 +92,34 @@ const Pricing = () => {
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ delay: index * 0.1 }} 
-              className={`card relative ${plan.highlight ? 'ring-2 ring-secondary-500 shadow-xl' : ''} ${plan.disabled ? 'opacity-75' : ''}`}
+              className={`card relative ${plan.highlight ? 'ring-2 ring-primary-500 shadow-xl' : ''} ${plan.disabled ? 'opacity-75' : ''}`}
             >
               {plan.badge && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className={`${plan.disabled ? 'bg-gray-500' : 'bg-secondary-500'} text-white px-4 py-1 rounded-full text-sm font-semibold`}>
+                  <span className={`${plan.disabled ? 'bg-slate-500' : 'bg-rose-500'} text-white px-4 py-1 rounded-full text-sm font-semibold`}>
                     {plan.badge}
                   </span>
                 </div>
               )}
               <div className="text-center mb-6">
-                <h3 className="text-xl font-heading font-bold text-gray-900 mb-2">{plan.name}</h3>
-                <p className="text-sm text-gray-600 mb-4">{plan.description}</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2">{plan.name}</h3>
+                <p className="text-sm text-slate-600 mb-4">{plan.description}</p>
                 <div className="flex items-end justify-center gap-1 min-h-[60px]">
-                  <span className={`${plan.disabled ? 'text-2xl' : 'text-4xl'} font-bold text-gray-900`}>{plan.price}</span>
-                  {plan.period && <span className="text-gray-500 mb-1">{plan.period}</span>}
+                  <span className={`${plan.disabled ? 'text-2xl' : 'text-4xl'} font-bold text-slate-900`}>{plan.price}</span>
+                  {plan.period && <span className="text-slate-500 mb-1">{plan.period}</span>}
                 </div>
               </div>
               <ul className="space-y-3 mb-6">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <FiCheck className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-gray-700">{feature}</span>
+                    <FiCheck className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm text-slate-700">{feature}</span>
                   </li>
                 ))}
                 {plan.notIncluded.map((feature, i) => (
                   <li key={`not-${i}`} className="flex items-start gap-2 opacity-50">
-                    <FiX className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-gray-500">{feature}</span>
+                    <FiX className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm text-slate-500">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -143,22 +143,22 @@ const Pricing = () => {
         </div>
 
         <div className="mb-20">
-          <h2 className="text-3xl font-heading font-bold text-gray-900 text-center mb-12">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-heading font-bold text-slate-900 text-center mb-12">Frequently Asked Questions</h2>
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {faqs.map((faq, index) => (
               <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="card">
-                <h3 className="font-semibold text-gray-900 mb-2">{faq.q}</h3>
-                <p className="text-gray-600 text-sm">{faq.a}</p>
+                <h3 className="font-semibold text-slate-900 mb-2">{faq.q}</h3>
+                <p className="text-slate-600 text-sm">{faq.a}</p>
               </motion.div>
             ))}
           </div>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-gradient-to-r from-secondary-500 to-secondary-600 text-white rounded-2xl p-8 md:p-12 text-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-gradient-to-r from-rose-500 to-rose-600 text-white rounded-2xl p-8 md:p-12 text-center">
           <h2 className="text-3xl font-heading font-bold mb-4">Still have questions?</h2>
-          <p className="text-xl mb-8 text-secondary-100">Our team is here to help you choose the right plan</p>
+          <p className="text-xl mb-8 text-rose-100">Our team is here to help you choose the right plan</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact" className="btn bg-white text-secondary-600 hover:bg-gray-100">Contact Sales</Link>
+            <Link to="/contact" className="btn bg-white text-rose-600 hover:bg-slate-100">Contact Sales</Link>
             <Link to="/auth/signup" className="btn bg-white/10 hover:bg-white/20 text-white border-2 border-white">Start Free</Link>
           </div>
         </motion.div>

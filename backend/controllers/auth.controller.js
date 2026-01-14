@@ -160,17 +160,8 @@ export const getMe = async (req, res, next) => {
 // @access  Public
 export const updateProfile = async (req, res, next) => {
   try {
-    const fieldsToUpdate = {
-      name: req.body.name,
-      phone: req.body.phone,
-      avatar: req.body.avatar
-    };
-
-    const user = await User.findByIdAndUpdate(req.params.userId, fieldsToUpdate, {
-      new: true,
-      runValidators: true
-    });
-
+    let user = await User.findById(req.params.userId);
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -178,11 +169,91 @@ export const updateProfile = async (req, res, next) => {
       });
     }
 
+    // Base fields that all users can update
+    const fieldsToUpdate = {};
+    if (req.body.name) fieldsToUpdate.name = req.body.name;
+    if (req.body.phone) fieldsToUpdate.phone = req.body.phone;
+    if (req.body.avatar) fieldsToUpdate.avatar = req.body.avatar;
+
+    // Worker-specific fields
+    if (user.role === 'worker') {
+      if (req.body.profession) fieldsToUpdate.profession = req.body.profession;
+      if (req.body.skills) fieldsToUpdate.skills = req.body.skills;
+      if (req.body.experience !== undefined) fieldsToUpdate.experience = req.body.experience;
+      if (req.body.bio !== undefined) fieldsToUpdate.bio = req.body.bio;
+      if (req.body.hourlyRate !== undefined) fieldsToUpdate.hourlyRate = req.body.hourlyRate;
+      
+      // Handle location - can be string or object
+      if (req.body.location) {
+        if (typeof req.body.location === 'string') {
+          fieldsToUpdate['location.address'] = req.body.location;
+          fieldsToUpdate['location.city'] = req.body.location;
+        } else if (typeof req.body.location === 'object') {
+          if (req.body.location.address) fieldsToUpdate['location.address'] = req.body.location.address;
+          if (req.body.location.city) fieldsToUpdate['location.city'] = req.body.location.city;
+          if (req.body.location.state) fieldsToUpdate['location.state'] = req.body.location.state;
+          if (req.body.location.pincode) fieldsToUpdate['location.pincode'] = req.body.location.pincode;
+          if (req.body.location.coordinates) fieldsToUpdate['location.coordinates'] = req.body.location.coordinates;
+        }
+      }
+      
+      // Use Worker model for worker updates
+      const updatedUser = await Worker.findByIdAndUpdate(
+        req.params.userId, 
+        { $set: fieldsToUpdate }, 
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: updatedUser
+      });
+    }
+
+    // Employer-specific fields
+    if (user.role === 'employer') {
+      if (req.body.companyName) fieldsToUpdate.companyName = req.body.companyName;
+      if (req.body.companyDescription) fieldsToUpdate.companyDescription = req.body.companyDescription;
+      if (req.body.website) fieldsToUpdate.website = req.body.website;
+      if (req.body.companySize) fieldsToUpdate.companySize = req.body.companySize;
+      if (req.body.industry) fieldsToUpdate.industry = req.body.industry;
+      if (req.body.location) fieldsToUpdate.location = req.body.location;
+      
+      // Use Employer model for employer updates
+      const updatedUser = await Employer.findByIdAndUpdate(
+        req.params.userId, 
+        { $set: fieldsToUpdate }, 
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: updatedUser
+      });
+    }
+
+    // For other roles, use base User model
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId, 
+      { $set: fieldsToUpdate }, 
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
     res.status(200).json({
       success: true,
-      data: user
+      data: updatedUser
     });
   } catch (error) {
+    console.error('Update profile error:', error);
     next(error);
   }
 };

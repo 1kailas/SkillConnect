@@ -90,12 +90,12 @@ const CreateJob = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link to="/dashboard/employer/jobs" className="text-gray-600 hover:text-gray-900">
+        <Link to="/dashboard/employer/jobs" className="text-slate-600 hover:text-slate-900">
           <FiArrowLeft className="w-6 h-6" />
         </Link>
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Post New Job</h1>
-          <p className="text-gray-600 mt-1">Find the perfect worker for your project</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Post New Job</h1>
+          <p className="text-slate-600 mt-1">Find the perfect worker for your project</p>
         </div>
       </div>
 
@@ -107,7 +107,7 @@ const CreateJob = () => {
                 <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
                   <FiBriefcase className="w-5 h-5 text-primary-600" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900">Job Details</h2>
+                <h2 className="text-xl font-semibold text-slate-900">Job Details</h2>
               </div>
 
               <div className="space-y-4">
@@ -255,10 +255,10 @@ const CreateJob = () => {
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="card">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <FiDollarSign className="w-5 h-5 text-green-600" />
+                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                  <FiDollarSign className="w-5 h-5 text-emerald-600" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900">Compensation</h2>
+                <h2 className="text-xl font-semibold text-slate-900">Compensation</h2>
               </div>
 
               <div className="space-y-4">
@@ -342,29 +342,29 @@ const CreateJob = () => {
 
           <div className="lg:col-span-1">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="card sticky top-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Preview</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Preview</h3>
               <div className="space-y-4">
                 {formData.title && (
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">{formData.title}</h4>
-                    <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+                    <h4 className="text-xl font-bold text-slate-900 mb-2">{formData.title}</h4>
+                    <div className="flex flex-wrap gap-2 text-sm text-slate-600">
                       {formData.category && <span className="badge bg-primary-100 text-primary-700">{formData.category}</span>}
-                      {formData.type && <span className="badge bg-gray-100 text-gray-700">{formData.type}</span>}
+                      {formData.type && <span className="badge bg-slate-100 text-slate-700">{formData.type}</span>}
                     </div>
                   </div>
                 )}
 
                 {formData.location && (
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <FiMapPin className="w-4 h-4 text-gray-500" />
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <FiMapPin className="w-4 h-4 text-slate-500" />
                     <span className="text-sm">{formData.location}</span>
                   </div>
                 )}
 
                 {(formData.salaryMin || formData.salaryMax) && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <div className="text-sm text-green-700 mb-1">Salary</div>
-                    <div className="font-semibold text-green-900">
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                    <div className="text-sm text-emerald-700 mb-1">Salary</div>
+                    <div className="font-semibold text-emerald-900">
                       {formData.salaryType === 'fixed' 
                         ? `₹${formData.salaryMin} (Fixed)`
                         : `₹${formData.salaryMin} - ₹${formData.salaryMax}/${formData.salaryType}`

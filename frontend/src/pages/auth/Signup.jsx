@@ -30,12 +30,12 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
+    <div className="p-8 md:p-10 max-h-[90vh] overflow-y-auto">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-heading font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-heading font-bold text-slate-900 mb-2">
           Create Account
         </h2>
-        <p className="text-gray-600">Join SkillConnect Kerala today</p>
+        <p className="text-slate-500">Join thousands of professionals today</p>
       </div>
 
       {/* Role Selection */}
@@ -43,27 +43,35 @@ const Signup = () => {
         <button
           type="button"
           onClick={() => setRole('worker')}
-          className={`p-4 border-2 rounded-lg transition ${
+          className={`p-4 border-2 rounded-xl transition-all duration-200 ${
             role === 'worker'
-              ? 'border-secondary-500 bg-secondary-50'
-              : 'border-gray-300 hover:border-gray-400'
+              ? 'border-primary-500 bg-primary-50 shadow-md shadow-primary-100'
+              : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
           }`}
         >
-          <FiUser className="mx-auto mb-2 text-2xl" />
-          <div className="font-medium">I'm a Worker</div>
+          <FiUser className={`mx-auto mb-2 text-2xl ${
+            role === 'worker' ? 'text-primary-600' : 'text-slate-400'
+          }`} />
+          <div className={`font-semibold ${
+            role === 'worker' ? 'text-slate-900' : 'text-slate-600'
+          }`}>I'm a Worker</div>
         </button>
 
         <button
           type="button"
           onClick={() => setRole('employer')}
-          className={`p-4 border-2 rounded-lg transition ${
+          className={`p-4 border-2 rounded-xl transition-all duration-200 ${
             role === 'employer'
-              ? 'border-secondary-500 bg-secondary-50'
-              : 'border-gray-300 hover:border-gray-400'
+              ? 'border-primary-500 bg-primary-50 shadow-md shadow-primary-100'
+              : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
           }`}
         >
-          <FiBriefcase className="mx-auto mb-2 text-2xl" />
-          <div className="font-medium">I'm an Employer</div>
+          <FiBriefcase className={`mx-auto mb-2 text-2xl ${
+            role === 'employer' ? 'text-primary-600' : 'text-slate-400'
+          }`} />
+          <div className={`font-semibold ${
+            role === 'employer' ? 'text-slate-900' : 'text-slate-600'
+          }`}>I'm an Employer</div>
         </button>
       </div>
 
@@ -72,7 +80,7 @@ const Signup = () => {
         <div>
           <label className="label">Full Name</label>
           <div className="relative">
-            <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               {...register('name', {
@@ -87,7 +95,7 @@ const Signup = () => {
             />
           </div>
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
 
@@ -95,7 +103,7 @@ const Signup = () => {
         <div>
           <label className="label">Email Address</label>
           <div className="relative">
-            <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="email"
               {...register('email', {
@@ -110,7 +118,7 @@ const Signup = () => {
             />
           </div>
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
@@ -118,7 +126,7 @@ const Signup = () => {
         <div>
           <label className="label">Phone Number</label>
           <div className="relative">
-            <FiPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="tel"
               {...register('phone', {
@@ -133,7 +141,7 @@ const Signup = () => {
             />
           </div>
           {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.phone.message}</p>
           )}
         </div>
 
@@ -151,7 +159,7 @@ const Signup = () => {
                 placeholder="Your company name"
               />
               {errors.companyName && (
-                <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
+                <p className="text-rose-500 text-sm mt-1">{errors.companyName.message}</p>
               )}
             </div>
 
@@ -170,7 +178,7 @@ const Signup = () => {
                 <option value="agency">Agency</option>
               </select>
               {errors.companyType && (
-                <p className="text-red-500 text-sm mt-1">{errors.companyType.message}</p>
+                <p className="text-rose-500 text-sm mt-1">{errors.companyType.message}</p>
               )}
             </div>
           </>
@@ -189,7 +197,7 @@ const Signup = () => {
               placeholder="e.g., Electrician, Plumber, Carpenter"
             />
             {errors.profession && (
-              <p className="text-red-500 text-sm mt-1">{errors.profession.message}</p>
+              <p className="text-rose-500 text-sm mt-1">{errors.profession.message}</p>
             )}
           </div>
         )}
@@ -198,7 +206,7 @@ const Signup = () => {
         <div>
           <label className="label">Password</label>
           <div className="relative">
-            <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="password"
               {...register('password', {
@@ -213,7 +221,7 @@ const Signup = () => {
             />
           </div>
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
 
@@ -221,7 +229,7 @@ const Signup = () => {
         <div>
           <label className="label">Confirm Password</label>
           <div className="relative">
-            <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="password"
               {...register('confirmPassword', {
@@ -234,7 +242,7 @@ const Signup = () => {
             />
           </div>
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+            <p className="text-rose-500 text-sm mt-1">{errors.confirmPassword.message}</p>
           )}
         </div>
 
@@ -245,21 +253,21 @@ const Signup = () => {
             {...register('terms', {
               required: 'You must accept the terms and conditions',
             })}
-            className="mt-1"
+            className="mt-1 w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
           />
-          <label className="text-sm text-gray-600">
+          <label className="text-sm text-slate-600">
             I agree to the{' '}
-            <Link to="/terms" className="text-secondary-500 hover:underline">
+            <Link to="/terms" className="text-primary-600 hover:text-primary-700 font-semibold">
               Terms and Conditions
             </Link>{' '}
             and{' '}
-            <Link to="/privacy" className="text-secondary-500 hover:underline">
+            <Link to="/privacy" className="text-primary-600 hover:text-primary-700 font-semibold">
               Privacy Policy
             </Link>
           </label>
         </div>
         {errors.terms && (
-          <p className="text-red-500 text-sm">{errors.terms.message}</p>
+          <p className="text-rose-500 text-sm">{errors.terms.message}</p>
         )}
 
         {/* Submit Button */}
@@ -281,11 +289,11 @@ const Signup = () => {
 
       {/* Login Link */}
       <div className="mt-6 text-center">
-        <p className="text-gray-600">
+        <p className="text-slate-600">
           Already have an account?{' '}
           <Link
             to="/auth/login"
-            className="text-secondary-500 hover:text-secondary-600 font-medium"
+            className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
           >
             Login
           </Link>
@@ -296,7 +304,7 @@ const Signup = () => {
       <div className="mt-4 text-center">
         <Link
           to="/"
-          className="text-gray-500 hover:text-gray-700 text-sm"
+          className="text-slate-400 hover:text-slate-600 text-sm transition-colors"
         >
           ← Back to Home
         </Link>

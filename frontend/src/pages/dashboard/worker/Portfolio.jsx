@@ -31,8 +31,8 @@ const Portfolio = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">Portfolio</h1>
-          <p className="text-gray-600 mt-1">Showcase your best work and achievements</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">Portfolio</h1>
+          <p className="text-slate-600 mt-1">Showcase your best work and achievements</p>
         </div>
         <button onClick={() => setShowAddModal(true)} className="btn btn-primary w-full sm:w-auto">
           <FiPlus /> Add Project
@@ -48,7 +48,7 @@ const Portfolio = () => {
               className={`px-4 py-2 rounded-lg font-medium transition ${
                 selectedCategory === category
                   ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
               {category}
@@ -59,9 +59,9 @@ const Portfolio = () => {
 
       {filteredPortfolio.length === 0 ? (
         <div className="card text-center py-12">
-          <FiImage className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects yet</h3>
-          <p className="text-gray-600 mb-4">Start building your portfolio by adding your completed projects</p>
+          <FiImage className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">No projects yet</h3>
+          <p className="text-slate-600 mb-4">Start building your portfolio by adding your completed projects</p>
           <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
             <FiPlus /> Add First Project
           </button>
@@ -76,20 +76,20 @@ const Portfolio = () => {
               transition={{ delay: index * 0.05 }}
               className="card overflow-hidden hover:shadow-lg transition"
             >
-              <div className="relative h-48 bg-gray-200 rounded-lg overflow-hidden mb-4">
+              <div className="relative h-48 bg-slate-200 rounded-lg overflow-hidden mb-4">
                 <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover" />
-                <span className="absolute top-2 right-2 badge bg-white text-gray-700">{item.category}</span>
+                <span className="absolute top-2 right-2 badge bg-white text-slate-700">{item.category}</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
-              <div className="text-xs text-gray-500 mb-4 space-y-1">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">{item.title}</h3>
+              <p className="text-sm text-slate-600 mb-3 line-clamp-2">{item.description}</p>
+              <div className="text-xs text-slate-500 mb-4 space-y-1">
                 <p><span className="font-medium">Client:</span> {item.client}</p>
                 <p><span className="font-medium">Date:</span> {item.date}</p>
               </div>
               <div className="flex gap-2">
                 <button className="btn btn-outline flex-1 text-sm"><FiExternalLink /> View Details</button>
                 <button className="btn btn-outline text-sm"><FiEdit2 /></button>
-                <button className="btn btn-outline text-red-600 hover:text-red-700 hover:border-red-600 text-sm"><FiTrash2 /></button>
+                <button className="btn btn-outline text-rose-600 hover:text-rose-700 hover:border-rose-600 text-sm"><FiTrash2 /></button>
               </div>
             </motion.div>
           ))}
@@ -99,7 +99,7 @@ const Portfolio = () => {
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl p-6 max-w-2xl w-full my-8">
-            <h2 className="text-2xl font-heading font-bold text-gray-900 mb-4">Add Portfolio Project</h2>
+            <h2 className="text-2xl font-heading font-bold text-slate-900 mb-4">Add Portfolio Project</h2>
             <form onSubmit={handleAdd} className="space-y-4">
               <div>
                 <label className="label">Project Title *</label>
@@ -131,10 +131,10 @@ const Portfolio = () => {
               </div>
               <div>
                 <label className="label">Upload Images *</label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-secondary-400 transition cursor-pointer">
-                  <FiImage className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
-                  <p className="text-xs text-gray-500 mt-1">JPG, PNG (Max 5 images, 2MB each)</p>
+                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-primary-400 transition cursor-pointer">
+                  <FiImage className="w-8 h-8 mx-auto text-slate-400 mb-2" />
+                  <p className="text-sm text-slate-600">Click to upload or drag and drop</p>
+                  <p className="text-xs text-slate-500 mt-1">JPG, PNG (Max 5 images, 2MB each)</p>
                   <input type="file" className="hidden" accept="image/*" multiple required />
                 </div>
               </div>

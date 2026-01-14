@@ -35,15 +35,15 @@ const JobListings = () => {
     <div className="py-12">
       <div className="container-custom">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">Find Your Next Job</h1>
-          <p className="text-lg text-gray-600">Browse {jobs.length}+ job opportunities across Kerala</p>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-4">Find Your Next Job</h1>
+          <p className="text-lg text-slate-600">Browse {jobs.length}+ job opportunities across Kerala</p>
         </div>
 
         {/* Search and Filter Bar */}
         <div className="card mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
               <input type="text" placeholder="Search jobs..." value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} className="input pl-12 w-full" />
             </div>
             <button onClick={() => setShowFilters(!showFilters)} className="btn btn-outline md:w-auto">
@@ -83,7 +83,7 @@ const JobListings = () => {
 
         {/* Results Count */}
         <div className="flex items-center justify-between mb-6">
-          <p className="text-gray-600">{filteredJobs.length} jobs found</p>
+          <p className="text-slate-600">{filteredJobs.length} jobs found</p>
           <select className="input w-auto">
             <option>Most Recent</option>
             <option>Salary: High to Low</option>
@@ -101,11 +101,11 @@ const JobListings = () => {
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-2">
                       <span className="badge bg-primary-100 text-primary-700">{job.category}</span>
-                      <span className="badge bg-green-100 text-green-700">{job.type}</span>
+                      <span className="badge bg-emerald-100 text-emerald-700">{job.type}</span>
                     </div>
-                    <h2 className="text-xl font-heading font-bold text-gray-900 mb-2">{job.title}</h2>
-                    <p className="text-gray-600 mb-3">{job.description}</p>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                    <h2 className="text-xl font-heading font-bold text-slate-900 mb-2">{job.title}</h2>
+                    <p className="text-slate-600 mb-3">{job.description}</p>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
                       <span className="flex items-center gap-1"><FiBriefcase className="w-4 h-4" />{job.company}</span>
                       <span className="flex items-center gap-1"><FiMapPin className="w-4 h-4" />{job.location}</span>
                       <span className="flex items-center gap-1"><FiDollarSign className="w-4 h-4" />{job.salary}</span>
@@ -114,8 +114,8 @@ const JobListings = () => {
                   </div>
                   <div className="flex md:flex-col items-center md:items-end gap-3">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-secondary-600">{job.applicants}</div>
-                      <div className="text-xs text-gray-500">Applicants</div>
+                      <div className="text-2xl font-bold text-rose-600">{job.applicants}</div>
+                      <div className="text-xs text-slate-500">Applicants</div>
                     </div>
                     <button className="btn btn-primary whitespace-nowrap">Apply Now</button>
                   </div>
@@ -127,9 +127,9 @@ const JobListings = () => {
 
         {filteredJobs.length === 0 && (
           <div className="text-center py-12">
-            <FiBriefcase className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No jobs found</h3>
-            <p className="text-gray-600">Try adjusting your filters or search query</p>
+            <FiBriefcase className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">No jobs found</h3>
+            <p className="text-slate-600">Try adjusting your filters or search query</p>
           </div>
         )}
       </div>

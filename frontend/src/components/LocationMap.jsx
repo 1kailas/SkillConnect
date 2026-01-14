@@ -56,9 +56,9 @@ const LocationMap = ({
             {marker.popup && (
               <Popup>
                 <div className="p-2">
-                  <h3 className="font-bold text-gray-900">{marker.popup.title}</h3>
+                  <h3 className="font-bold text-slate-900">{marker.popup.title}</h3>
                   {marker.popup.description && (
-                    <p className="text-sm text-gray-600 mt-1">{marker.popup.description}</p>
+                    <p className="text-sm text-slate-600 mt-1">{marker.popup.description}</p>
                   )}
                   {marker.popup.action && (
                     <button
