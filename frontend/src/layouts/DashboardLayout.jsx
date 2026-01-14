@@ -30,7 +30,7 @@ const DashboardLayout = () => {
 
   const menuItems = {
     worker: [
-      { path: '/dashboard/worker', icon: FiHome, label: 'Observer' },
+      { path: '/dashboard/worker', icon: FiHome, label: 'Overview' },
       { path: '/dashboard/worker/jobs', icon: FiBriefcase, label: 'Find Work' },
       { path: '/dashboard/worker/applications', icon: FiFileText, label: 'Applications' },
       { path: '/dashboard/worker/profile', icon: FiUser, label: 'My Skills' },

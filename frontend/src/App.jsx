@@ -104,8 +104,10 @@ function App() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="workers" element={<WorkerSearch />} />
           <Route path="workers/:id" element={<WorkerProfile />} />
+          <Route path="worker/:id" element={<WorkerProfile />} />
           <Route path="jobs" element={<JobListings />} />
           <Route path="jobs/:id" element={<JobDetails />} />
+          <Route path="job/:id" element={<JobDetails />} />
           <Route path="verify-certificate" element={<CertificateVerification />} />
         </Route>
 

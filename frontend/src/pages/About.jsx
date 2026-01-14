@@ -1,5 +1,6 @@
 import { FiTarget, FiEye, FiHeart, FiAward, FiUsers, FiTrendingUp } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const About = () => {
   const stats = [
@@ -64,7 +65,7 @@ const About = () => {
               return (
                 <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="card text-center">
                   <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-8 h-8 text-rose-600" />
+                    <Icon className="w-8 h-8 text-primary-600" />
                   </div>
                   <h3 className="text-xl font-heading font-bold text-slate-900 mb-3">{value.title}</h3>
                   <p className="text-slate-600">{value.description}</p>
@@ -75,12 +76,12 @@ const About = () => {
         </div>
 
         {/* CTA */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-rose-500 to-rose-600 text-white rounded-2xl p-8 md:p-12 text-center">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-2xl p-8 md:p-12 text-center">
           <h2 className="text-3xl font-heading font-bold mb-4">Ready to Join Our Community?</h2>
-          <p className="text-xl mb-8 text-rose-100">Whether you're a skilled worker or an employer, we're here to help you succeed.</p>
+          <p className="text-xl mb-8 text-primary-100">Whether you're a skilled worker or an employer, we're here to help you succeed.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/auth/signup?role=worker" className="btn bg-white text-rose-600 hover:bg-slate-100">Join as Worker</a>
-            <a href="/auth/signup?role=employer" className="btn bg-white/10 hover:bg-white/20 text-white border-2 border-white">Join as Employer</a>
+            <Link to="/auth/signup?role=worker" className="btn bg-white text-primary-600 hover:bg-slate-100">Join as Worker</Link>
+            <Link to="/auth/signup?role=employer" className="btn bg-white/10 hover:bg-white/20 text-white border-2 border-white">Join as Employer</Link>
           </div>
         </motion.div>
       </div>

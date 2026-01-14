@@ -55,8 +55,16 @@ const Jobs = () => {
 
   const formatSalary = (job) => {
     if (!job.salary) return 'Not specified';
-    const { amount, type } = job.salary;
-    return `₹${amount}/${type}`;
+    const { min, max, amount, type } = job.salary;
+    const salaryType = type || 'monthly';
+    
+    if (min && max && min !== max) {
+      return `₹${min.toLocaleString()} - ₹${max.toLocaleString()}/${salaryType}`;
+    }
+    if (min || amount) {
+      return `₹${(min || amount).toLocaleString()}/${salaryType}`;
+    }
+    return 'Not specified';
   };
 
   const hasApplied = (job) => {

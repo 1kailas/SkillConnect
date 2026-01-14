@@ -1,4 +1,5 @@
 import Worker from '../models/Worker.model.js';
+import { safeRegex } from '../utils/sanitize.js';
 
 // @desc    Get all workers
 // @route   GET /api/workers
@@ -18,11 +19,11 @@ export const getWorkers = async (req, res, next) => {
     const query = { isActive: true };
 
     if (skill) {
-      query.skills = { $in: [new RegExp(skill, 'i')] };
+      query.skills = { $in: [safeRegex(skill)] };
     }
 
     if (city) {
-      query['location.city'] = new RegExp(city, 'i');
+      query['location.city'] = safeRegex(city);
     }
 
     if (rating) {
@@ -89,7 +90,7 @@ export const searchWorkers = async (req, res, next) => {
 
     if (skills) {
       const skillsArray = skills.split(',').map(s => s.trim());
-      query.skills = { $in: skillsArray.map(skill => new RegExp(skill, 'i')) };
+      query.skills = { $in: skillsArray.map(skill => safeRegex(skill)) };
     }
 
     if (availability) {

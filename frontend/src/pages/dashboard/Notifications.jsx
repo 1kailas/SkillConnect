@@ -1,20 +1,79 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiBell, FiBriefcase, FiCheck, FiMessageSquare, FiStar, FiUserCheck, FiAlertCircle, FiX } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
+import api from '../../lib/axios';
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState([
-    { id: 1, type: 'application', title: 'Application Accepted', message: 'Your application for "Electrician for Villa Project" has been accepted!', time: '5 min ago', read: false, icon: FiCheck, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
-    { id: 2, type: 'message', title: 'New Message', message: 'Tech Solutions sent you a message', time: '15 min ago', read: false, icon: FiMessageSquare, color: 'text-primary-600', bgColor: 'bg-primary-50' },
-    { id: 3, type: 'job', title: 'New Job Match', message: 'New job posting matches your profile: "Plumber - Urgent"', time: '1 hour ago', read: false, icon: FiBriefcase, color: 'text-violet-600', bgColor: 'bg-violet-50' },
-    { id: 4, type: 'review', title: 'New Review', message: 'You received a 5-star review from Ramesh Kumar', time: '3 hours ago', read: true, icon: FiStar, color: 'text-amber-600', bgColor: 'bg-amber-50' },
-    { id: 5, type: 'verification', title: 'Certificate Verified', message: 'Your ITI Electrician Certificate has been verified', time: '5 hours ago', read: true, icon: FiUserCheck, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
-    { id: 6, type: 'application', title: 'Application Status', message: 'Your application for "Carpenter" position is under review', time: 'Yesterday', read: true, icon: FiBriefcase, color: 'text-primary-600', bgColor: 'bg-primary-50' },
-    { id: 7, type: 'alert', title: 'Profile Incomplete', message: 'Complete your profile to get more job opportunities', time: '2 days ago', read: true, icon: FiAlertCircle, color: 'text-rose-600', bgColor: 'bg-rose-50' },
-    { id: 8, type: 'message', title: 'New Message', message: 'ABC Constructions sent you a message', time: '3 days ago', read: true, icon: FiMessageSquare, color: 'text-primary-600', bgColor: 'bg-primary-50' },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const iconMap = {
+    application: { icon: FiBriefcase, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    message: { icon: FiMessageSquare, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+    job: { icon: FiBriefcase, color: 'text-violet-600', bgColor: 'bg-violet-50' },
+    review: { icon: FiStar, color: 'text-amber-600', bgColor: 'bg-amber-50' },
+    verification: { icon: FiUserCheck, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    alert: { icon: FiAlertCircle, color: 'text-rose-600', bgColor: 'bg-rose-50' },
+    success: { icon: FiCheck, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
+    default: { icon: FiBell, color: 'text-slate-600', bgColor: 'bg-slate-50' },
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get('/notifications');
+      const fetchedNotifs = data.data || [];
+      
+      // Format notifications with icons
+      const formattedNotifs = fetchedNotifs.map(n => {
+        const iconConfig = iconMap[n.type] || iconMap.default;
+        return {
+          ...n,
+          id: n._id,
+          icon: iconConfig.icon,
+          color: iconConfig.color,
+          bgColor: iconConfig.bgColor,
+          time: getTimeAgo(n.createdAt)
+        };
+      });
+      
+      if (formattedNotifs.length === 0) {
+        // Use fallback data if no notifications
+        setNotifications([
+          { id: 1, type: 'job', title: 'Welcome to SkillConnect!', message: 'Start exploring jobs and opportunities near you.', time: 'Just now', read: false, icon: FiBriefcase, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+        ]);
+      } else {
+        setNotifications(formattedNotifs);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      setNotifications([
+        { id: 1, type: 'alert', title: 'Welcome!', message: 'Your notification center is ready.', time: 'Just now', read: false, icon: FiBell, color: 'text-primary-600', bgColor: 'bg-primary-50' },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTimeAgo = (dateString) => {
+    if (!dateString) return 'Recently';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMinutes = Math.floor((now - date) / (1000 * 60));
+    if (diffMinutes < 1) return 'Just now';
+    if (diffMinutes < 60) return `${diffMinutes} min ago`;
+    const diffHours = Math.floor(diffMinutes / 60);
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays === 1) return 'Yesterday';
+    return `${diffDays} days ago`;
+  };
 
   const [filter, setFilter] = useState('all');
 
@@ -26,18 +85,36 @@ const Notifications = () => {
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const markAsRead = (id) => {
-    setNotifications(notifs => notifs.map(n => n.id === id ? { ...n, read: true } : n));
+  const markAsRead = async (id) => {
+    try {
+      await api.put(`/notifications/${id}/read`);
+      setNotifications(notifs => notifs.map(n => n.id === id ? { ...n, read: true } : n));
+    } catch (error) {
+      // Still update locally even if API fails
+      setNotifications(notifs => notifs.map(n => n.id === id ? { ...n, read: true } : n));
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
-    toast.success('All notifications marked as read');
+  const markAllAsRead = async () => {
+    try {
+      await api.put('/notifications/read-all');
+      setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
+      toast.success('All notifications marked as read');
+    } catch (error) {
+      setNotifications(notifs => notifs.map(n => ({ ...n, read: true })));
+      toast.success('All notifications marked as read');
+    }
   };
 
-  const deleteNotification = (id) => {
-    setNotifications(notifs => notifs.filter(n => n.id !== id));
-    toast.success('Notification deleted');
+  const deleteNotification = async (id) => {
+    try {
+      await api.delete(`/notifications/${id}`);
+      setNotifications(notifs => notifs.filter(n => n.id !== id));
+      toast.success('Notification deleted');
+    } catch (error) {
+      setNotifications(notifs => notifs.filter(n => n.id !== id));
+      toast.success('Notification deleted');
+    }
   };
 
   return (

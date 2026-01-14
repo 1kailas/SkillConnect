@@ -16,16 +16,20 @@ const CreateJob = () => {
     category: 'electrical',
     location: '',
     city: '',
-    state: '',
+    state: 'Kerala',
     pincode: '',
     jobType: 'full-time',
     description: '',
     requirements: '',
     skills: '',
-    experience: 0,
+    experience: '0',
     salaryType: 'monthly',
-    salaryAmount: '',
+    salaryMin: '',
+    salaryMax: '',
+    startDate: '',
     duration: '',
+    workersNeeded: 1,
+    urgency: 'medium'
   });
 
   const categories = [
@@ -46,6 +50,16 @@ const CreateJob = () => {
     setLoading(true);
     
     try {
+      // Validate required fields
+      if (!formData.title || !formData.description || !formData.city) {
+        toast.error('Please fill in all required fields');
+        setLoading(false);
+        return;
+      }
+
+      const salaryMin = parseFloat(formData.salaryMin) || 0;
+      const salaryMax = parseFloat(formData.salaryMax) || salaryMin;
+
       const jobData = {
         title: formData.title,
         description: formData.description,
@@ -53,22 +67,27 @@ const CreateJob = () => {
         jobType: formData.jobType,
         location: {
           type: 'Point',
-          coordinates: [0, 0], // You can add actual coordinates later
-          address: formData.location,
+          coordinates: [76.2673, 9.9312], // Default Kerala coordinates
+          address: formData.location || `${formData.city}, ${formData.state}`,
           city: formData.city,
-          state: formData.state,
+          state: formData.state || 'Kerala',
           pincode: formData.pincode,
         },
         salary: {
-          amount: parseFloat(formData.salaryAmount),
+          min: salaryMin,
+          max: salaryMax,
+          amount: salaryMin, // Use min as the base amount
           type: formData.salaryType,
           currency: 'INR',
         },
-        skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean),
+        skills: formData.skills ? formData.skills.split(',').map(s => s.trim()).filter(Boolean) : [],
         requirements: {
           experience: parseInt(formData.experience) || 0,
-          education: formData.requirements,
+          education: formData.requirements || '',
         },
+        workersNeeded: parseInt(formData.workersNeeded) || 1,
+        urgency: formData.urgency || 'medium',
+        startDate: formData.startDate || undefined,
       };
 
       await api.post('/jobs', jobData);
@@ -240,13 +259,14 @@ const CreateJob = () => {
                     />
                   </div>
                   <div>
-                    <label className="label">Minimum Experience *</label>
+                    <label className="label">Minimum Experience (Years) *</label>
                     <select name="experience" value={formData.experience} onChange={handleChange} className="input" required>
-                      <option value="">Select experience</option>
-                      <option value="0-1">0-1 years</option>
-                      <option value="1-3">1-3 years</option>
-                      <option value="3-5">3-5 years</option>
-                      <option value="5+">5+ years</option>
+                      <option value="0">No experience required</option>
+                      <option value="1">1+ years</option>
+                      <option value="2">2+ years</option>
+                      <option value="3">3+ years</option>
+                      <option value="5">5+ years</option>
+                      <option value="10">10+ years</option>
                     </select>
                   </div>
                 </div>
@@ -266,7 +286,9 @@ const CreateJob = () => {
                   <label className="label">Salary Type *</label>
                   <select name="salaryType" value={formData.salaryType} onChange={handleChange} className="input" required>
                     <option value="monthly">Monthly</option>
+                    <option value="daily">Daily</option>
                     <option value="hourly">Hourly</option>
+                    <option value="weekly">Weekly</option>
                     <option value="fixed">Fixed Project Cost</option>
                   </select>
                 </div>
@@ -280,38 +302,64 @@ const CreateJob = () => {
                       value={formData.salaryMin}
                       onChange={handleChange}
                       className="input"
-                      placeholder="50000"
+                      placeholder="e.g., 50000"
                       required
+                      min="0"
                     />
                   </div>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="label">Minimum {formData.salaryType === 'hourly' ? 'Rate' : 'Salary'} (₹) *</label>
+                      <label className="label">Minimum {formData.salaryType === 'hourly' ? 'Rate' : formData.salaryType === 'daily' ? 'Daily Rate' : 'Salary'} (₹) *</label>
                       <input
                         type="number"
                         name="salaryMin"
                         value={formData.salaryMin}
                         onChange={handleChange}
                         className="input"
-                        placeholder="20000"
+                        placeholder={formData.salaryType === 'hourly' ? '200' : formData.salaryType === 'daily' ? '800' : '20000'}
                         required
+                        min="0"
                       />
                     </div>
                     <div>
-                      <label className="label">Maximum {formData.salaryType === 'hourly' ? 'Rate' : 'Salary'} (₹) *</label>
+                      <label className="label">Maximum {formData.salaryType === 'hourly' ? 'Rate' : formData.salaryType === 'daily' ? 'Daily Rate' : 'Salary'} (₹)</label>
                       <input
                         type="number"
                         name="salaryMax"
                         value={formData.salaryMax}
                         onChange={handleChange}
                         className="input"
-                        placeholder="30000"
-                        required
+                        placeholder={formData.salaryType === 'hourly' ? '500' : formData.salaryType === 'daily' ? '1500' : '30000'}
+                        min="0"
                       />
                     </div>
                   </div>
                 )}
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label">Workers Needed</label>
+                    <input
+                      type="number"
+                      name="workersNeeded"
+                      value={formData.workersNeeded}
+                      onChange={handleChange}
+                      className="input"
+                      placeholder="1"
+                      min="1"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Urgency</label>
+                    <select name="urgency" value={formData.urgency} onChange={handleChange} className="input">
+                      <option value="low">Low - Flexible timeline</option>
+                      <option value="medium">Medium - Within a week</option>
+                      <option value="high">High - Within 2-3 days</option>
+                      <option value="urgent">Urgent - ASAP</option>
+                    </select>
+                  </div>
+                </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>

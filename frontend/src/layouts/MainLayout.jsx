@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX, FiChevronDown, FiUser, FiLinkedin, FiTwitter, FiFacebook, FiInstagram } from 'react-icons/fi';
 import useAuthStore from '../store/authStore';
 
@@ -10,6 +10,7 @@ const MainLayout = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +19,23 @@ const MainLayout = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Close menus on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setUserMenuOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
@@ -83,7 +101,7 @@ const MainLayout = () => {
             {/* Auth Buttons */}
             <div className="hidden lg:flex items-center gap-4">
               {isAuthenticated ? (
-                <div className="relative">
+                <div className="relative" ref={userMenuRef}>
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-3 pl-2 pr-4 py-1.5 bg-white border border-slate-200 rounded-full hover:border-primary-300 transition-all duration-200 hover:shadow-md"
@@ -295,7 +313,7 @@ const MainLayout = () => {
           </div>
           
           <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-            <p>&copy; 2024 SkillConnect Kerala. Made with ❤️ in Kerala.</p>
+            <p>&copy; {new Date().getFullYear()} SkillConnect Kerala. Made with ❤️ in Kerala.</p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>

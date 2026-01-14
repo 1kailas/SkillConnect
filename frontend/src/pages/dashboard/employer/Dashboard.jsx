@@ -3,26 +3,74 @@ import { Link } from 'react-router-dom';
 import { FiBriefcase, FiUsers, FiEye, FiPlus, FiCheckCircle, FiClock, FiStar, FiTrendingUp } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import useAuthStore from '../../../store/authStore';
+import api from '../../../lib/axios';
+import toast from 'react-hot-toast';
 
 const EmployerDashboard = () => {
   const { user } = useAuthStore();
   const [stats, setStats] = useState({ activeJobs: 0, totalApplicants: 0, hiredWorkers: 0, averageRating: 0 });
+  const [recentJobs, setRecentJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const recentJobs = [
-    { id: 1, title: 'Senior Electrician', applicants: 12, status: 'Active', postedDate: '2 days ago', views: 45 },
-    { id: 2, title: 'Plumbing Expert', applicants: 8, status: 'Active', postedDate: '5 days ago', views: 32 },
-    { id: 3, title: 'Construction Worker', applicants: 20, status: 'Filled', postedDate: '1 week ago', views: 68 },
-  ];
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      // Fetch employer's jobs
+      const { data } = await api.get('/jobs', { params: { employer: 'me', limit: 5 } });
+      const jobs = data.data || [];
+      
+      // Calculate stats
+      const activeJobs = jobs.filter(j => j.status === 'open').length;
+      const totalApplicants = jobs.reduce((sum, j) => sum + (j.applicants?.length || 0), 0);
+      const hiredWorkers = jobs.filter(j => j.hiredWorker).length;
+      
+      setStats({
+        activeJobs,
+        totalApplicants,
+        hiredWorkers,
+        averageRating: user?.rating?.average || 4.5
+      });
+
+      // Format recent jobs
+      setRecentJobs(jobs.slice(0, 3).map(job => ({
+        id: job._id,
+        title: job.title,
+        applicants: job.applicants?.length || 0,
+        status: job.status === 'open' ? 'Active' : job.status.charAt(0).toUpperCase() + job.status.slice(1),
+        postedDate: getTimeAgo(job.createdAt),
+        views: job.views || 0
+      })));
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      // Use fallback data if API fails
+      setStats({ activeJobs: 0, totalApplicants: 0, hiredWorkers: 0, averageRating: 4.5 });
+      setRecentJobs([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTimeAgo = (dateString) => {
+    if (!dateString) return 'Recently';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    return `${Math.floor(diffDays / 30)} months ago`;
+  };
 
   const recentApplicants = [
     { id: 1, name: 'Rajesh Kumar', profession: 'Electrician', rating: 4.8, applied: '1 hour ago', status: 'New' },
     { id: 2, name: 'Amit Sharma', profession: 'Plumber', rating: 4.6, applied: '3 hours ago', status: 'Reviewed' },
     { id: 3, name: 'Suresh Nair', profession: 'Carpenter', rating: 4.9, applied: '5 hours ago', status: 'New' },
   ];
-
-  useEffect(() => {
-    setStats({ activeJobs: 5, totalApplicants: 48, hiredWorkers: 15, averageRating: 4.7 });
-  }, []);
 
   const statCards = [
     { title: 'Active Job Posts', value: stats.activeJobs, icon: FiBriefcase, color: 'text-primary-600', bgColor: 'bg-primary-50', link: '/dashboard/employer/jobs' },

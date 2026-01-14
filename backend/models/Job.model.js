@@ -53,9 +53,17 @@ const jobSchema = new mongoose.Schema({
     }
   },
   salary: {
+    min: {
+      type: Number,
+      default: 0
+    },
+    max: {
+      type: Number,
+      default: 0
+    },
     amount: {
       type: Number,
-      required: true
+      default: 0
     },
     currency: {
       type: String,
@@ -64,7 +72,7 @@ const jobSchema = new mongoose.Schema({
     type: {
       type: String,
       enum: ['hourly', 'daily', 'weekly', 'monthly', 'fixed'],
-      required: true
+      default: 'monthly'
     }
   },
   requirements: {

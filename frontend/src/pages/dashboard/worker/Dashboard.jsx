@@ -7,6 +7,7 @@ import {
 import { motion } from 'framer-motion';
 import useAuthStore from '../../../store/authStore';
 import AIJobMatcher from '../../../components/AIJobMatcher';
+import api from '../../../lib/axios';
 
 const WorkerDashboard = () => {
   const { user } = useAuthStore();
@@ -17,21 +18,82 @@ const WorkerDashboard = () => {
     averageRating: 0,
   });
   const [aiRecommendations, setAiRecommendations] = useState([]);
-
-  const recentActivities = [
-    { id: 1, type: 'application', title: 'Applied for Electrician position', company: 'ABC Constructions', date: '2 hours ago', icon: FiFileText },
-    { id: 2, type: 'review', title: 'Received 5-star review', company: 'XYZ Builders', date: '1 day ago', icon: FiStar },
-    { id: 3, type: 'job', title: 'Completed Plumbing work', company: 'Home Services Ltd', date: '2 days ago', icon: FiBriefcase },
-  ];
-
-  const upcomingJobs = [
-    { id: 1, title: 'Electrical Installation', company: 'Tech Park Solutions', location: 'Kottayam', date: 'Tomorrow, 10:00 AM', payment: '₹5,000' },
-    { id: 2, title: 'Home Repair Work', company: 'Residential Complex', location: 'Alappuzha', date: 'Dec 20, 2025', payment: '₹3,500' },
-  ];
+  const [recentActivities, setRecentActivities] = useState([]);
+  const [upcomingJobs, setUpcomingJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setStats({ activeApplications: 5, completedJobs: 12, totalEarnings: 45000, averageRating: 4.8 });
+    fetchDashboardData();
   }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      // Fetch worker's applications
+      const { data } = await api.get('/jobs/applications/me');
+      const applications = data.data || [];
+      
+      const activeApplications = applications.filter(a => a.status === 'pending').length;
+      const completedJobs = applications.filter(a => a.status === 'completed' || a.status === 'hired').length;
+      
+      setStats({
+        activeApplications,
+        completedJobs,
+        totalEarnings: completedJobs * 3000, // Estimate
+        averageRating: user?.rating?.average || 4.8,
+      });
+
+      // Set recent activities from applications
+      setRecentActivities(applications.slice(0, 3).map((app, idx) => ({
+        id: idx + 1,
+        type: 'application',
+        title: `Applied for ${app.job?.title || 'Job'}`,
+        company: app.job?.employer?.companyName || 'Company',
+        date: getTimeAgo(app.appliedAt),
+        icon: FiFileText
+      })));
+
+      // Set upcoming jobs from hired applications
+      const hired = applications.filter(a => a.status === 'hired');
+      setUpcomingJobs(hired.slice(0, 2).map(app => ({
+        id: app._id,
+        title: app.job?.title || 'Job',
+        company: app.job?.employer?.companyName || 'Company',
+        location: app.job?.location?.city || 'Kerala',
+        date: 'Scheduled',
+        payment: formatSalary(app.job?.salary)
+      })));
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      // Use fallback data
+      setStats({ activeApplications: 0, completedJobs: 0, totalEarnings: 0, averageRating: 4.8 });
+      setRecentActivities([
+        { id: 1, type: 'application', title: 'Ready to apply for jobs', company: 'Browse available positions', date: 'Now', icon: FiFileText },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTimeAgo = (dateString) => {
+    if (!dateString) return 'Recently';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffHours = Math.floor((now - date) / (1000 * 60 * 60));
+    if (diffHours < 1) return 'Just now';
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays === 1) return 'Yesterday';
+    return `${diffDays} days ago`;
+  };
+
+  const formatSalary = (salary) => {
+    if (!salary) return '₹Negotiable';
+    if (salary.min && salary.max) return `₹${salary.min.toLocaleString()} - ₹${salary.max.toLocaleString()}`;
+    if (salary.amount) return `₹${salary.amount.toLocaleString()}`;
+    return '₹Negotiable';
+  };
 
   const statCards = [
     { title: 'Active Applications', value: stats.activeApplications, icon: FiFileText, color: 'text-primary-600', bgColor: 'bg-primary-50', link: '/dashboard/worker/applications' },

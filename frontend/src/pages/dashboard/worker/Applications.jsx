@@ -1,18 +1,69 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiFileText, FiMapPin, FiDollarSign, FiClock, FiEye, FiXCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import api from '../../../lib/axios';
+import toast from 'react-hot-toast';
 
 const Applications = () => {
   const [filter, setFilter] = useState('all');
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const applications = [
-    { id: 1, jobTitle: 'Senior Electrician', company: 'Tech Park Solutions', location: 'Kottayam', salary: '₹25,000-₹35,000/month', appliedDate: '2 days ago', status: 'under_review', views: 5 },
-    { id: 2, jobTitle: 'Home Wiring Project', company: 'Residential Complex', location: 'Alappuzha', salary: '₹40,000', appliedDate: '5 days ago', status: 'shortlisted', views: 12, interview: 'Dec 20, 10:00 AM' },
-    { id: 3, jobTitle: 'Commercial Repair Work', company: 'ABC Builders', location: 'Kollam', salary: '₹500/hour', appliedDate: '1 week ago', status: 'rejected', views: 8, reason: 'Position filled' },
-    { id: 4, jobTitle: 'Maintenance Contract', company: 'Hotel Services', location: 'Kottayam', salary: '₹60,000', appliedDate: '3 days ago', status: 'accepted', views: 15, startDate: 'Dec 22, 2025' },
-    { id: 5, jobTitle: 'Factory Electrical Setup', company: 'Manufacturing Ltd', location: 'Pathanamthitta', salary: '₹30,000/month', appliedDate: '1 day ago', status: 'pending', views: 2 },
-  ];
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
+  const fetchApplications = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get('/jobs/applications/me');
+      const apps = data.data || [];
+      
+      // Format applications for display
+      const formattedApps = apps.map(app => ({
+        id: app.job?._id || app._id,
+        applicationId: app._id,
+        jobTitle: app.job?.title || 'Job Title',
+        company: app.job?.employer?.companyName || app.job?.employer?.name || 'Company',
+        location: app.job?.location?.city || app.job?.location?.address || 'Kerala',
+        salary: formatSalary(app.job?.salary),
+        appliedDate: getTimeAgo(app.appliedAt),
+        status: app.status || 'pending',
+        views: app.job?.views || 0
+      }));
+      
+      setApplications(formattedApps);
+    } catch (error) {
+      console.error('Error fetching applications:', error);
+      toast.error('Failed to fetch applications');
+      setApplications([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getTimeAgo = (dateString) => {
+    if (!dateString) return 'Recently';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return `${Math.floor(diffDays / 7)} weeks ago`;
+  };
+
+  const formatSalary = (salary) => {
+    if (!salary) return 'Negotiable';
+    if (salary.min && salary.max) {
+      return `₹${salary.min.toLocaleString()} - ₹${salary.max.toLocaleString()}/${salary.type || 'month'}`;
+    }
+    if (salary.amount) {
+      return `₹${salary.amount.toLocaleString()}/${salary.type || 'month'}`;
+    }
+    return 'Negotiable';
+  };
 
   const statusConfig = {
     pending: { label: 'Pending', color: 'bg-slate-100 text-slate-700', icon: FiClock },

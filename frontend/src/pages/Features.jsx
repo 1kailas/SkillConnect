@@ -1,4 +1,4 @@
-import { FiAward, FiShield, FiMapPin, FiStar, FiZap, FiUsers, FiMessageSquare, FiCheckCircle, FiTrendingUp, FiDollarSign, FiClock, FiBell } from 'react-icons/fi';
+import { FiAward, FiShield, FiMapPin, FiStar, FiZap, FiUsers, FiMessageSquare, FiCheckCircle, FiTrendingUp, FiDollarSign, FiClock, FiBell, FiBriefcase } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -124,5 +124,4 @@ const Features = () => {
   );
 };
 
-const FiBriefcase = FiUsers;
 export default Features;

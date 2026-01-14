@@ -89,8 +89,8 @@ const Home = () => {
               <div className="mt-10 flex items-center gap-4 text-sm text-slate-500">
                 <div className="flex -space-x-3">
                   {[1,2,3,4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
-                       <img src={`https://ui-avatars.com/api/?name=User+${i}&background=random`} alt="User" />
+                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-primary-400 to-primary-600 overflow-hidden flex items-center justify-center text-white text-xs font-bold">
+                      {String.fromCharCode(64 + i)}
                     </div>
                   ))}
                 </div>

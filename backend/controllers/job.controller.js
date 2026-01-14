@@ -1,5 +1,6 @@
 import Job from '../models/Job.model.js';
 import Employer from '../models/Employer.model.js';
+import { safeRegex } from '../utils/sanitize.js';
 
 // @desc    Get all jobs
 // @route   GET /api/jobs
@@ -35,7 +36,7 @@ export const getJobs = async (req, res, next) => {
     }
 
     if (city) {
-      query['location.city'] = new RegExp(city, 'i');
+      query['location.city'] = safeRegex(city);
     }
 
     if (status) {
@@ -97,7 +98,7 @@ export const searchJobs = async (req, res, next) => {
 
     if (skills) {
       const skillsArray = skills.split(',').map(s => s.trim());
-      query.skills = { $in: skillsArray.map(skill => new RegExp(skill, 'i')) };
+      query.skills = { $in: skillsArray.map(skill => safeRegex(skill)) };
     }
 
     if (category) {
@@ -319,6 +320,50 @@ export const getJobApplications = async (req, res, next) => {
       success: true,
       count: job.applicants.length,
       data: job.applicants
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get my applications (for workers)
+// @route   GET /api/jobs/applications/me
+// @access  Private/Worker
+export const getMyApplications = async (req, res, next) => {
+  try {
+    // Find all jobs where current user has applied
+    const jobs = await Job.find({
+      'applicants.worker': req.user._id
+    })
+      .populate('employer', 'name companyName avatar rating')
+      .select('title category location salary applicants employer createdAt views');
+
+    // Extract applications for this user
+    const applications = jobs.map(job => {
+      const myApplication = job.applicants.find(
+        app => app.worker.toString() === req.user._id.toString()
+      );
+      return {
+        _id: myApplication._id,
+        job: {
+          _id: job._id,
+          title: job.title,
+          category: job.category,
+          location: job.location,
+          salary: job.salary,
+          employer: job.employer,
+          views: job.views
+        },
+        status: myApplication.status,
+        appliedAt: myApplication.appliedAt,
+        coverLetter: myApplication.coverLetter
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      count: applications.length,
+      data: applications
     });
   } catch (error) {
     next(error);

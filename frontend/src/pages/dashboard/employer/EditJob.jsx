@@ -3,37 +3,137 @@ import { FiArrowLeft, FiBriefcase, FiMapPin, FiDollarSign, FiSave } from 'react-
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
+import api from '../../../lib/axios';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const EditJob = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    title: 'Electrician for Villa Project',
-    category: 'Electrician',
-    location: 'Bangalore, Karnataka',
-    type: 'Contract',
-    description: 'Looking for an experienced electrician to handle complete electrical installation for a 3BHK villa project.',
-    requirements: 'Valid ITI certificate\nMinimum 3 years experience\nKnowledge of residential wiring',
-    skills: 'Wiring, Panel Installation, Safety Standards',
-    experience: '3-5',
+    title: '',
+    category: 'electrical',
+    location: '',
+    city: '',
+    state: 'Kerala',
+    pincode: '',
+    jobType: 'full-time',
+    description: '',
+    requirements: '',
+    skills: '',
+    experience: '0',
     salaryType: 'monthly',
-    salaryMin: '25000',
-    salaryMax: '35000',
-    startDate: '2024-03-01',
-    duration: '2 months',
-    positions: '1',
-    status: 'active',
+    salaryMin: '',
+    salaryMax: '',
+    startDate: '',
+    duration: '',
+    workersNeeded: 1,
+    urgency: 'medium',
+    status: 'open',
   });
 
   const categories = [
-    'Electrician', 'Plumber', 'Carpenter', 'Mason', 'Painter',
-    'Welder', 'AC Technician', 'Driver', 'Helper', 'Other'
+    { value: 'construction', label: 'Construction' },
+    { value: 'plumbing', label: 'Plumbing' },
+    { value: 'electrical', label: 'Electrical' },
+    { value: 'carpentry', label: 'Carpentry' },
+    { value: 'painting', label: 'Painting' },
+    { value: 'welding', label: 'Welding' },
+    { value: 'masonry', label: 'Masonry' },
+    { value: 'landscaping', label: 'Landscaping' },
+    { value: 'cleaning', label: 'Cleaning' },
+    { value: 'other', label: 'Other' }
   ];
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchJob();
+  }, [jobId]);
+
+  const fetchJob = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get(`/jobs/${jobId}`);
+      const job = data.data;
+      
+      setFormData({
+        title: job.title || '',
+        category: job.category || 'electrical',
+        location: job.location?.address || '',
+        city: job.location?.city || '',
+        state: job.location?.state || 'Kerala',
+        pincode: job.location?.pincode || '',
+        jobType: job.jobType || 'full-time',
+        description: job.description || '',
+        requirements: job.requirements?.education || '',
+        skills: job.skills?.join(', ') || '',
+        experience: job.requirements?.experience?.toString() || '0',
+        salaryType: job.salary?.type || 'monthly',
+        salaryMin: job.salary?.min?.toString() || job.salary?.amount?.toString() || '',
+        salaryMax: job.salary?.max?.toString() || '',
+        startDate: job.startDate ? new Date(job.startDate).toISOString().split('T')[0] : '',
+        duration: job.duration?.value ? `${job.duration.value} ${job.duration.unit}` : '',
+        workersNeeded: job.workersNeeded || 1,
+        urgency: job.urgency || 'medium',
+        status: job.status || 'open',
+      });
+    } catch (error) {
+      console.error('Error fetching job:', error);
+      toast.error('Failed to load job details');
+      navigate('/dashboard/employer/jobs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success('Job updated successfully!');
-    navigate('/employer/jobs');
+    setSaving(true);
+    
+    try {
+      const salaryMin = parseFloat(formData.salaryMin) || 0;
+      const salaryMax = parseFloat(formData.salaryMax) || salaryMin;
+
+      const jobData = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        jobType: formData.jobType,
+        location: {
+          type: 'Point',
+          coordinates: [76.2673, 9.9312],
+          address: formData.location || `${formData.city}, ${formData.state}`,
+          city: formData.city,
+          state: formData.state || 'Kerala',
+          pincode: formData.pincode,
+        },
+        salary: {
+          min: salaryMin,
+          max: salaryMax,
+          amount: salaryMin,
+          type: formData.salaryType,
+          currency: 'INR',
+        },
+        skills: formData.skills ? formData.skills.split(',').map(s => s.trim()).filter(Boolean) : [],
+        requirements: {
+          experience: parseInt(formData.experience) || 0,
+          education: formData.requirements || '',
+        },
+        workersNeeded: parseInt(formData.workersNeeded) || 1,
+        urgency: formData.urgency || 'medium',
+        status: formData.status,
+        startDate: formData.startDate || undefined,
+      };
+
+      await api.put(`/jobs/${jobId}`, jobData);
+      toast.success('Job updated successfully!');
+      navigate('/dashboard/employer/jobs');
+    } catch (error) {
+      console.error('Error updating job:', error);
+      toast.error(error.response?.data?.message || 'Failed to update job');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -41,10 +141,14 @@ const EditJob = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  if (loading) {
+    return <LoadingSpinner fullScreen text="Loading job details..." />;
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link to="/employer/jobs" className="text-slate-600 hover:text-slate-900">
+        <Link to="/dashboard/employer/jobs" className="text-slate-600 hover:text-slate-900">
           <FiArrowLeft className="w-6 h-6" />
         </Link>
         <div>
@@ -74,29 +178,38 @@ const EditJob = () => {
                   <div>
                     <label className="label">Category *</label>
                     <select name="category" value={formData.category} onChange={handleChange} className="input" required>
-                      {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                      {categories.map(cat => <option key={cat.value} value={cat.value}>{cat.label}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="label">Location *</label>
-                    <input type="text" name="location" value={formData.location} onChange={handleChange} className="input" required />
+                    <label className="label">Job Type *</label>
+                    <select name="jobType" value={formData.jobType} onChange={handleChange} className="input" required>
+                      <option value="full-time">Full-time</option>
+                      <option value="part-time">Part-time</option>
+                      <option value="contract">Contract</option>
+                      <option value="temporary">Temporary</option>
+                    </select>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-3 gap-4">
                   <div>
-                    <label className="label">Job Type *</label>
-                    <select name="type" value={formData.type} onChange={handleChange} className="input" required>
-                      <option value="Full-time">Full-time</option>
-                      <option value="Part-time">Part-time</option>
-                      <option value="Contract">Contract</option>
-                      <option value="Project">Project Based</option>
-                    </select>
+                    <label className="label">City *</label>
+                    <input type="text" name="city" value={formData.city} onChange={handleChange} className="input" required />
                   </div>
                   <div>
-                    <label className="label">Number of Positions *</label>
-                    <input type="number" name="positions" value={formData.positions} onChange={handleChange} className="input" min="1" required />
+                    <label className="label">State</label>
+                    <input type="text" name="state" value={formData.state} onChange={handleChange} className="input" />
                   </div>
+                  <div>
+                    <label className="label">Pincode</label>
+                    <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} className="input" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="label">Full Address</label>
+                  <input type="text" name="location" value={formData.location} onChange={handleChange} className="input" />
                 </div>
 
                 <div>
@@ -112,26 +225,41 @@ const EditJob = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="label">Required Skills</label>
-                    <input type="text" name="skills" value={formData.skills} onChange={handleChange} className="input" />
+                    <input type="text" name="skills" value={formData.skills} onChange={handleChange} className="input" placeholder="e.g., Wiring, Installation" />
                   </div>
                   <div>
-                    <label className="label">Minimum Experience *</label>
-                    <select name="experience" value={formData.experience} onChange={handleChange} className="input" required>
-                      <option value="0-1">0-1 years</option>
-                      <option value="1-3">1-3 years</option>
-                      <option value="3-5">3-5 years</option>
-                      <option value="5+">5+ years</option>
+                    <label className="label">Minimum Experience (Years)</label>
+                    <select name="experience" value={formData.experience} onChange={handleChange} className="input">
+                      <option value="0">No experience required</option>
+                      <option value="1">1+ years</option>
+                      <option value="2">2+ years</option>
+                      <option value="3">3+ years</option>
+                      <option value="5">5+ years</option>
+                      <option value="10">10+ years</option>
                     </select>
                   </div>
                 </div>
 
-                <div>
-                  <label className="label">Status *</label>
-                  <select name="status" value={formData.status} onChange={handleChange} className="input" required>
-                    <option value="draft">Draft</option>
-                    <option value="active">Active</option>
-                    <option value="closed">Closed</option>
-                  </select>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label">Status *</label>
+                    <select name="status" value={formData.status} onChange={handleChange} className="input" required>
+                      <option value="open">Open</option>
+                      <option value="in-progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                      <option value="closed">Closed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Urgency</label>
+                    <select name="urgency" value={formData.urgency} onChange={handleChange} className="input">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -149,7 +277,9 @@ const EditJob = () => {
                   <label className="label">Salary Type *</label>
                   <select name="salaryType" value={formData.salaryType} onChange={handleChange} className="input" required>
                     <option value="monthly">Monthly</option>
+                    <option value="daily">Daily</option>
                     <option value="hourly">Hourly</option>
+                    <option value="weekly">Weekly</option>
                     <option value="fixed">Fixed Project Cost</option>
                   </select>
                 </div>
@@ -157,17 +287,17 @@ const EditJob = () => {
                 {formData.salaryType === 'fixed' ? (
                   <div>
                     <label className="label">Project Budget (₹) *</label>
-                    <input type="number" name="salaryMin" value={formData.salaryMin} onChange={handleChange} className="input" required />
+                    <input type="number" name="salaryMin" value={formData.salaryMin} onChange={handleChange} className="input" required min="0" />
                   </div>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="label">Minimum {formData.salaryType === 'hourly' ? 'Rate' : 'Salary'} (₹) *</label>
-                      <input type="number" name="salaryMin" value={formData.salaryMin} onChange={handleChange} className="input" required />
+                      <label className="label">Minimum {formData.salaryType === 'hourly' ? 'Rate' : formData.salaryType === 'daily' ? 'Daily Rate' : 'Salary'} (₹) *</label>
+                      <input type="number" name="salaryMin" value={formData.salaryMin} onChange={handleChange} className="input" required min="0" />
                     </div>
                     <div>
-                      <label className="label">Maximum {formData.salaryType === 'hourly' ? 'Rate' : 'Salary'} (₹) *</label>
-                      <input type="number" name="salaryMax" value={formData.salaryMax} onChange={handleChange} className="input" required />
+                      <label className="label">Maximum {formData.salaryType === 'hourly' ? 'Rate' : formData.salaryType === 'daily' ? 'Daily Rate' : 'Salary'} (₹)</label>
+                      <input type="number" name="salaryMax" value={formData.salaryMax} onChange={handleChange} className="input" min="0" />
                     </div>
                   </div>
                 )}
@@ -217,10 +347,10 @@ const EditJob = () => {
                 </div>
 
                 <div className="pt-4 border-t space-y-3">
-                  <button type="submit" className="btn btn-primary w-full">
-                    <FiSave /> Save Changes
+                  <button type="submit" disabled={saving} className="btn btn-primary w-full">
+                    {saving ? 'Saving...' : <><FiSave /> Save Changes</>}
                   </button>
-                  <Link to="/employer/jobs" className="btn btn-outline w-full text-center">
+                  <Link to="/dashboard/employer/jobs" className="btn btn-outline w-full text-center">
                     Cancel
                   </Link>
                 </div>

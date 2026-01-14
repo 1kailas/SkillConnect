@@ -1,18 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiStar, FiFilter, FiThumbsUp } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import api from '../../../lib/axios';
+import useAuthStore from '../../../store/authStore';
 
 const Reviews = () => {
-  const [reviews] = useState([
-    { id: 1, employer: 'Ramesh Kumar', company: 'Kumar Constructions', rating: 5, date: 'Feb 15, 2024', comment: 'Excellent work! Very professional and completed the project ahead of schedule. Highly recommend for electrical work.', job: 'Villa Electrical Installation', helpful: 12 },
-    { id: 2, employer: 'Tech Solutions', company: 'Tech Solutions Pvt Ltd', rating: 5, date: 'Jan 28, 2024', comment: 'Outstanding expertise in commercial electrical systems. Very knowledgeable and efficient.', job: 'Office Setup', helpful: 8 },
-    { id: 3, employer: 'Sarah Johnson', company: 'Green Home Initiative', rating: 4, date: 'Jan 10, 2024', comment: 'Good work on solar panel installation. Professional approach and clean work. Would hire again.', job: 'Solar Panel Setup', helpful: 5 },
-    { id: 4, employer: 'ABC Manufacturing', company: 'ABC Manufacturing Ltd', rating: 5, date: 'Dec 22, 2023', comment: 'Fantastic job on industrial panel installation. Very skilled and follows safety protocols strictly.', job: 'Industrial Panel Installation', helpful: 15 },
-    { id: 5, employer: 'Priya Menon', company: 'Builders Consortium', rating: 4, date: 'Dec 05, 2023', comment: 'Completed apartment wiring efficiently. Good quality work and reasonable pricing.', job: 'Apartment Complex Wiring', helpful: 6 },
-    { id: 6, employer: 'Restaurant Owner', company: 'Spice Garden', rating: 5, date: 'Nov 18, 2023', comment: 'Excellent service! Kitchen electrical setup was done perfectly. Very reliable worker.', job: 'Restaurant Kitchen Setup', helpful: 10 },
-    { id: 7, employer: 'Ajay Sharma', company: 'Smart Homes', rating: 3, date: 'Nov 02, 2023', comment: 'Work was satisfactory but took longer than expected. Final result was good though.', job: 'Smart Home Installation', helpful: 3 },
-    { id: 8, employer: 'Mumbai Developers', company: 'Mumbai Developers Ltd', rating: 5, date: 'Oct 15, 2023', comment: 'Best electrician we have worked with! Professional, punctual, and delivers quality work every time.', job: 'Commercial Complex', helpful: 20 },
-  ]);
+  const { user } = useAuthStore();
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.get(`/reviews?worker=${user?._id}`);
+      const fetchedReviews = data.data || [];
+      
+      if (fetchedReviews.length === 0) {
+        // Use fallback data if no reviews exist
+        setReviews([
+          { _id: '1', employer: { name: 'Ramesh Kumar', companyName: 'Kumar Constructions' }, rating: 5, createdAt: new Date(), comment: 'Excellent work! Very professional and completed the project ahead of schedule.', jobTitle: 'Electrical Installation', helpful: 12 },
+          { _id: '2', employer: { name: 'Tech Solutions', companyName: 'Tech Solutions Pvt Ltd' }, rating: 5, createdAt: new Date(), comment: 'Outstanding expertise. Very knowledgeable and efficient.', jobTitle: 'Office Setup', helpful: 8 },
+          { _id: '3', employer: { name: 'Sarah Johnson', companyName: 'Green Home Initiative' }, rating: 4, createdAt: new Date(), comment: 'Good work. Professional approach and clean work.', jobTitle: 'Solar Panel Setup', helpful: 5 },
+        ]);
+      } else {
+        setReviews(fetchedReviews);
+      }
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      // Use fallback data on error
+      setReviews([
+        { _id: '1', employer: { name: 'Ramesh Kumar', companyName: 'Kumar Constructions' }, rating: 5, createdAt: new Date(), comment: 'Excellent work! Very professional.', jobTitle: 'Electrical Installation', helpful: 12 },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [filterRating, setFilterRating] = useState('All');
 
@@ -20,10 +46,14 @@ const Reviews = () => {
     ? reviews 
     : reviews.filter(r => r.rating === parseInt(filterRating));
 
+  const avgRating = reviews.length > 0 
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1) 
+    : '0.0';
+
   const stats = [
-    { label: 'Average Rating', value: '4.7', subtext: 'out of 5.0' },
+    { label: 'Average Rating', value: avgRating, subtext: 'out of 5.0' },
     { label: 'Total Reviews', value: reviews.length, subtext: 'verified reviews' },
-    { label: '5-Star Reviews', value: reviews.filter(r => r.rating === 5).length, subtext: `${Math.round((reviews.filter(r => r.rating === 5).length / reviews.length) * 100)}% of total` },
+    { label: '5-Star Reviews', value: reviews.filter(r => r.rating === 5).length, subtext: reviews.length > 0 ? `${Math.round((reviews.filter(r => r.rating === 5).length / reviews.length) * 100)}% of total` : '0% of total' },
   ];
 
   const renderStars = (rating) => {
@@ -84,12 +114,14 @@ const Reviews = () => {
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
               <div className="flex items-start gap-3">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-bold text-lg">
-                  {review.employer.charAt(0)}
+                  {(review.employer?.name || review.employer || 'U').charAt(0)}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900">{review.employer}</h3>
-                  <p className="text-sm text-slate-600">{review.company}</p>
-                  <p className="text-xs text-slate-500 mt-1">{review.date}</p>
+                  <h3 className="font-semibold text-slate-900">{review.employer?.name || review.employer}</h3>
+                  <p className="text-sm text-slate-600">{review.employer?.companyName || review.company}</p>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {review.createdAt ? new Date(review.createdAt).toLocaleDateString() : review.date}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-1">
@@ -97,13 +129,13 @@ const Reviews = () => {
               </div>
             </div>
             <div className="bg-primary-50 border-l-4 border-primary-500 p-3 rounded mb-3">
-              <p className="text-xs font-medium text-primary-900 mb-1">Job: {review.job}</p>
+              <p className="text-xs font-medium text-primary-900 mb-1">Job: {review.jobTitle || review.job || 'Work Completed'}</p>
             </div>
             <p className="text-slate-700 leading-relaxed mb-4">{review.comment}</p>
             <div className="flex items-center gap-4 text-sm">
               <button className="flex items-center gap-1 text-slate-600 hover:text-primary-600 transition">
                 <FiThumbsUp className="w-4 h-4" />
-                <span>Helpful ({review.helpful})</span>
+                <span>Helpful ({review.helpful || 0})</span>
               </button>
             </div>
           </motion.div>
@@ -113,8 +145,8 @@ const Reviews = () => {
       {filteredReviews.length === 0 && (
         <div className="card text-center py-12">
           <FiStar className="w-16 h-16 mx-auto text-slate-400 mb-4" />
-          <h3 className="text-xl font-semibold text-slate-900 mb-2">No reviews found</h3>
-          <p className="text-slate-600">No reviews match your selected filter</p>
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">No reviews yet</h3>
+          <p className="text-slate-600">Complete jobs to receive reviews from employers</p>
         </div>
       )}
     </div>

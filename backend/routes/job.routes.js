@@ -7,6 +7,7 @@ import {
   deleteJob,
   applyForJob,
   getJobApplications,
+  getMyApplications,
   updateApplicationStatus,
   searchJobs
 } from '../controllers/job.controller.js';
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.get('/', getJobs);
 router.get('/search', searchJobs);
+router.get('/applications/me', protect, authorize('worker'), getMyApplications);
 router.get('/:id', getJob);
 router.post('/', protect, authorize('employer'), createJob);
 router.put('/:id', protect, authorize('employer'), updateJob);

@@ -153,11 +153,21 @@ export const login = async (req, res, next) => {
 };
 
 // @desc    Get user by ID
-// @route   GET /api/auth/me/:userId
-// @access  Public
+// @route   GET /api/auth/me or GET /api/auth/me/:userId
+// @access  Private (with protect middleware)
 export const getMe = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId);
+    // Support both authenticated user (req.user) and legacy route (req.params.userId)
+    const userId = req.user?._id || req.params.userId;
+    
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID is required'
+      });
+    }
+
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({
@@ -176,11 +186,21 @@ export const getMe = async (req, res, next) => {
 };
 
 // @desc    Update user profile
-// @route   PUT /api/auth/update-profile/:userId
-// @access  Public
+// @route   PUT /api/auth/update-profile or PUT /api/auth/update-profile/:userId
+// @access  Private (with protect middleware)
 export const updateProfile = async (req, res, next) => {
   try {
-    let user = await User.findById(req.params.userId);
+    // Support both authenticated user (req.user) and legacy route (req.params.userId)
+    const userId = req.user?._id || req.params.userId;
+    
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID is required'
+      });
+    }
+
+    let user = await User.findById(userId);
     
     if (!user) {
       return res.status(404).json({
@@ -219,7 +239,7 @@ export const updateProfile = async (req, res, next) => {
       
       // Use Worker model for worker updates
       const updatedUser = await Worker.findByIdAndUpdate(
-        req.params.userId, 
+        userId, 
         { $set: fieldsToUpdate }, 
         {
           new: true,
@@ -244,7 +264,7 @@ export const updateProfile = async (req, res, next) => {
       
       // Use Employer model for employer updates
       const updatedUser = await Employer.findByIdAndUpdate(
-        req.params.userId, 
+        userId, 
         { $set: fieldsToUpdate }, 
         {
           new: true,
@@ -260,7 +280,7 @@ export const updateProfile = async (req, res, next) => {
 
     // For other roles, use base User model
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.userId, 
+      userId, 
       { $set: fieldsToUpdate }, 
       {
         new: true,
@@ -279,11 +299,21 @@ export const updateProfile = async (req, res, next) => {
 };
 
 // @desc    Update password
-// @route   PUT /api/auth/update-password/:userId
-// @access  Public
+// @route   PUT /api/auth/update-password or PUT /api/auth/update-password/:userId
+// @access  Private (with protect middleware)
 export const updatePassword = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId).select('+password');
+    // Support both authenticated user (req.user) and legacy route (req.params.userId)
+    const userId = req.user?._id || req.params.userId;
+    
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID is required'
+      });
+    }
+
+    const user = await User.findById(userId).select('+password');
 
     if (!user) {
       return res.status(404).json({

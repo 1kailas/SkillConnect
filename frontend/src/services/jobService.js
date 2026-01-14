@@ -42,9 +42,15 @@ export const applyForJob = async (id, applicationData) => {
   return data;
 };
 
-// Get job applications
+// Get job applications (for employers)
 export const getJobApplications = async (id) => {
   const { data } = await api.get(`/jobs/${id}/applications`);
+  return data;
+};
+
+// Get my applications (for workers)
+export const getMyApplications = async () => {
+  const { data } = await api.get('/jobs/applications/me');
   return data;
 };
 
