@@ -167,7 +167,9 @@ const WorkerSearch = () => {
 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {worker.skills?.slice(0, 3).map((skill, i) => (
-                    <span key={i} className="badge bg-primary-50 text-primary-700 text-xs">{skill}</span>
+                    <span key={i} className="badge bg-primary-50 text-primary-700 text-xs">
+                      {typeof skill === 'string' ? skill : skill.name}
+                    </span>
                   ))}
                 </div>
 
