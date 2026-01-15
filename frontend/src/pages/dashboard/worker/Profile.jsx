@@ -6,6 +6,7 @@ import AISkillRecommender from '../../../components/AISkillRecommender';
 import AISkillGapAnalyzer from '../../../components/AISkillGapAnalyzer';
 import AISalaryEstimator from '../../../components/AISalaryEstimator';
 import AIEnhanceButton from '../../../components/AIEnhanceButton';
+import SkillsManager from '../../../components/SkillsManager';
 
 const Profile = () => {
   const { user, updateProfile } = useAuthStore();
@@ -23,7 +24,12 @@ const Profile = () => {
     experience: '5 years',
     hourlyRate: '500',
     bio: 'Experienced electrician specializing in residential and commercial electrical work.',
-    skills: ['Wiring', 'Circuit Installation', 'Troubleshooting', 'Maintenance'],
+    skills: [
+      { name: 'Wiring', level: 'advanced', proofType: 'certificate', yearsOfExperience: 5, proof: { certificateTitle: 'Advanced Electrical Wiring', certificateIssuer: 'National Institute' } },
+      { name: 'Circuit Installation', level: 'intermediate', proofType: 'project', yearsOfExperience: 3, proof: { projectTitle: 'Smart Home Setup', projectDescription: 'Installed complete circuit system for modern home' } },
+      { name: 'Troubleshooting', level: 'advanced', proofType: 'none', yearsOfExperience: 5, proof: {} },
+      { name: 'Maintenance', level: 'beginner', proofType: 'none', yearsOfExperience: 1, proof: {} }
+    ],
     role: 'worker'
   }, [user]);
 
@@ -36,18 +42,32 @@ const Profile = () => {
     experience: '',
     hourlyRate: '',
     bio: '',
-    skills: '',
+    skills: [],
   });
 
   // Populate form data when profileUser changes
   useEffect(() => {
     console.log('Profile User Data:', profileUser);
     
-    const skills = Array.isArray(profileUser?.skills)
-      ? profileUser.skills.join(', ')
-      : typeof profileUser?.skills === 'string'
-      ? profileUser.skills
-      : '';
+    // Handle skills - ensure it's an array with the new structure
+    let skills = [];
+    if (Array.isArray(profileUser?.skills)) {
+      // Check if it's the new structure (array of objects) or old (array of strings)
+      skills = profileUser.skills.map(skill => {
+        if (typeof skill === 'string') {
+          // Convert old format to new format
+          return {
+            name: skill,
+            level: 'beginner',
+            proofType: 'none',
+            yearsOfExperience: 0,
+            proof: {}
+          };
+        }
+        // Already in new format
+        return skill;
+      });
+    }
 
     // Handle location - convert object to string if needed
     const location = typeof profileUser?.location === 'string' 
@@ -74,12 +94,8 @@ const Profile = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Convert skills to array if it's a string
-      const skills = Array.isArray(formData.skills) 
-        ? formData.skills 
-        : formData.skills.split(',').map(s => s.trim()).filter(s => s);
-      
-      const updatedData = { ...formData, skills };
+      // Skills are already in the correct array format
+      const updatedData = { ...formData };
       
       if (user) {
         console.log('Submitting profile update:', updatedData);
@@ -215,11 +231,6 @@ const Profile = () => {
             </div>
 
             <div>
-              <label className="label">Skills (comma-separated)</label>
-              <input type="text" value={formData.skills} onChange={(e) => setFormData({...formData, skills: e.target.value})} disabled={!isEditing} className="input" placeholder="e.g., Wiring, Installation, Repair" />
-            </div>
-
-            <div>
               <label className="label">Bio</label>
               <textarea value={formData.bio} onChange={(e) => setFormData({...formData, bio: e.target.value})} disabled={!isEditing} className="input min-h-[100px]" placeholder="Tell us about yourself..." />
               {isEditing && (
@@ -236,6 +247,15 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Skills Management Section */}
+      <div className="card">
+        <SkillsManager 
+          skills={formData.skills}
+          onUpdate={(updatedSkills) => setFormData({...formData, skills: updatedSkills})}
+          isEditing={isEditing}
+        />
+      </div>
+
       {/* AI Career Development Section */}
       {!isEditing && (
         <>
@@ -249,7 +269,10 @@ const Profile = () => {
             </div>
             <AISkillRecommender
               currentProfession={profileUser?.profession}
-              currentSkills={Array.isArray(profileUser?.skills) ? profileUser.skills : []}
+              currentSkills={Array.isArray(profileUser?.skills) 
+                ? profileUser.skills.map(s => typeof s === 'string' ? s : s.name) 
+                : []
+              }
               onSkillsRecommended={(skills) => {
                 toast.success(`AI suggests learning: ${skills.slice(0, 3).join(', ')}`);
               }}
@@ -265,7 +288,10 @@ const Profile = () => {
               Analyze gaps between your current skills and your career goals
             </p>
             <AISkillGapAnalyzer
-              currentSkills={Array.isArray(profileUser?.skills) ? profileUser.skills : []}
+              currentSkills={Array.isArray(profileUser?.skills) 
+                ? profileUser.skills.map(s => typeof s === 'string' ? s : s.name)
+                : []
+              }
               targetProfession={`Senior ${profileUser?.profession || 'Professional'}`}
             />
           </div>

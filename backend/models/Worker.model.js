@@ -8,8 +8,45 @@ const workerSchema = new mongoose.Schema({
     trim: true
   },
   skills: [{
-    type: String,
-    trim: true
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    level: {
+      type: String,
+      enum: ['beginner', 'intermediate', 'advanced'],
+      required: true,
+      default: 'beginner'
+    },
+    proofType: {
+      type: String,
+      enum: ['project', 'certificate', 'none'],
+      default: 'none'
+    },
+    proof: {
+      // For projects
+      projectTitle: String,
+      projectDescription: String,
+      projectUrl: String,
+      projectImage: String,
+      
+      // For certificates
+      certificateTitle: String,
+      certificateIssuer: String,
+      certificateDate: Date,
+      certificateUrl: String,
+      certificateId: String
+    },
+    yearsOfExperience: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    addedAt: {
+      type: Date,
+      default: Date.now
+    }
   }],
   experience: {
     type: Number,

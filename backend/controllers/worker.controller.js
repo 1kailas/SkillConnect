@@ -19,7 +19,7 @@ export const getWorkers = async (req, res, next) => {
     const query = { isActive: true };
 
     if (skill) {
-      query.skills = { $in: [safeRegex(skill)] };
+      query['skills.name'] = { $regex: safeRegex(skill), $options: 'i' };
     }
 
     if (city) {
@@ -90,7 +90,7 @@ export const searchWorkers = async (req, res, next) => {
 
     if (skills) {
       const skillsArray = skills.split(',').map(s => s.trim());
-      query.skills = { $in: skillsArray.map(skill => safeRegex(skill)) };
+      query['skills.name'] = { $in: skillsArray.map(skill => new RegExp(safeRegex(skill), 'i')) };
     }
 
     if (availability) {

@@ -398,18 +398,48 @@ const WorkerProfile = () => {
                 >
                   <h2 className="text-xl font-bold text-slate-900 mb-4">Skills & Expertise</h2>
                   {worker.skills && worker.skills.length > 0 ? (
-                    <div className="flex flex-wrap gap-3">
-                      {worker.skills.map((skill, index) => (
-                        <motion.span
-                          key={index}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="px-4 py-2 bg-primary-50 text-primary-700 rounded-xl font-medium hover:bg-primary-100 transition-colors"
-                        >
-                          {skill}
-                        </motion.span>
-                      ))}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {worker.skills.map((skill, index) => {
+                        const skillName = typeof skill === 'string' ? skill : skill.name;
+                        const skillLevel = typeof skill === 'object' ? skill.level : null;
+                        const skillYears = typeof skill === 'object' ? skill.yearsOfExperience : null;
+                        const skillProof = typeof skill === 'object' ? skill.proofType : null;
+                        
+                        const levelColors = {
+                          beginner: 'bg-blue-100 text-blue-700 border-blue-200',
+                          intermediate: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+                          advanced: 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                        };
+                        
+                        return (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="border border-slate-200 rounded-lg p-4 hover:border-primary-300 hover:shadow-md transition-all"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <h3 className="font-semibold text-slate-900">{skillName}</h3>
+                              {skillProof && skillProof !== 'none' && (
+                                <span className="text-xs px-2 py-1 bg-emerald-50 text-emerald-700 rounded-full flex items-center gap-1">
+                                  {skillProof === 'certificate' ? '🏆' : '📁'} Verified
+                                </span>
+                              )}
+                            </div>
+                            {skillLevel && (
+                              <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${levelColors[skillLevel] || levelColors.beginner}`}>
+                                {skillLevel.charAt(0).toUpperCase() + skillLevel.slice(1)}
+                              </span>
+                            )}
+                            {skillYears > 0 && (
+                              <p className="text-sm text-slate-600 mt-2">
+                                {skillYears} {skillYears === 1 ? 'year' : 'years'} of experience
+                              </p>
+                            )}
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="text-center py-8 text-slate-500">
