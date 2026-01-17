@@ -1,6 +1,6 @@
 import Job from '../models/Job.model.js';
 import Employer from '../models/Employer.model.js';
-import { safeRegex } from '../utils/sanitize.js';
+import { safeRegex, sanitizeInput } from '../utils/sanitize.js';
 
 // @desc    Get all jobs
 // @route   GET /api/jobs
@@ -205,7 +205,20 @@ export const updateJob = async (req, res, next) => {
       });
     }
 
-    job = await Job.findByIdAndUpdate(req.params.id, req.body, {
+    // Whitelist allowed fields to update
+    const allowedFields = [
+      'title', 'description', 'category', 'jobType', 'skillsRequired',
+      'experienceRequired', 'budget', 'location', 'duration', 'status'
+    ];
+    
+    const updateData = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    });
+
+    job = await Job.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true
     });

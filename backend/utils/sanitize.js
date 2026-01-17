@@ -53,6 +53,27 @@ export const sanitizeQuery = (query) => {
 };
 
 /**
+ * Sanitize general text input to prevent XSS attacks
+ * Removes HTML tags and dangerous characters
+ * @param {string} input - Input text to sanitize
+ * @returns {string} - Sanitized text
+ */
+export const sanitizeInput = (input) => {
+  if (!input || typeof input !== 'string') return '';
+  
+  // Remove HTML tags
+  let sanitized = input.replace(/<[^>]*>/g, '');
+  
+  // Trim whitespace
+  sanitized = sanitized.trim();
+  
+  // Limit length
+  sanitized = sanitized.substring(0, 1000);
+  
+  return sanitized;
+};
+
+/**
  * Validate and sanitize email address
  * @param {string} email - Email to validate
  * @returns {string|null} - Sanitized email or null if invalid
@@ -80,6 +101,7 @@ export default {
   escapeRegex,
   safeRegex,
   sanitizeQuery,
+  sanitizeInput,
   sanitizeEmail,
   sanitizePhone
 };

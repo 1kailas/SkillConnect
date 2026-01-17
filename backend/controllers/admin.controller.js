@@ -60,6 +60,14 @@ export const updateUserStatus = async (req, res, next) => {
       });
     }
 
+    // Prevent admins from modifying admin accounts (including their own)
+    if (user.role === 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Cannot modify admin accounts'
+      });
+    }
+
     if (isActive !== undefined) {
       user.isActive = isActive;
     }

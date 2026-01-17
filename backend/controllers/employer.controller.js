@@ -28,10 +28,25 @@ export const getEmployer = async (req, res, next) => {
 // @access  Private/Employer
 export const updateEmployer = async (req, res, next) => {
   try {
-    const fieldsToUpdate = { ...req.body };
+    // Whitelist allowed fields
+    const allowedFields = [
+      'name', 'phone', 'avatar', 'companyName', 'companyDescription',
+      'website', 'companySize', 'industry', 'location'
+    ];
+    
+    const fieldsToUpdate = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        fieldsToUpdate[field] = req.body[field];
+      }
+    });
+
+    // Ensure no protected fields can be updated
     delete fieldsToUpdate.password;
     delete fieldsToUpdate.role;
     delete fieldsToUpdate.email;
+    delete fieldsToUpdate.isActive;
+    delete fieldsToUpdate.isVerified;
 
     const employer = await Employer.findByIdAndUpdate(
       req.user._id,

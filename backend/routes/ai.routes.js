@@ -1,5 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
+import { protect } from '../middleware/auth.middleware.js';
 import {
   getJobRecommendations,
   getWorkerRecommendations,
@@ -42,8 +43,11 @@ const chatValidation = [
 
 // Routes
 
-// Health check
+// Health check - public
 router.get('/health', getHealth);
+
+// All AI routes require authentication
+router.use(protect);
 
 // Recommendations
 router.post('/recommendations/jobs', jobRecommendationValidation, getJobRecommendations);

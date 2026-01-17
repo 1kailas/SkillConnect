@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.model.js';
 import Worker from '../models/Worker.model.js';
 import Employer from '../models/Employer.model.js';
+import { sanitizeInput } from '../utils/sanitize.js';
 
 // Generate JWT token
 const generateToken = (id) => {
@@ -26,8 +27,13 @@ export const register = async (req, res, next) => {
 
     const { name, email, phone, password, role, ...additionalData } = req.body;
 
+    // Sanitize inputs to prevent XSS
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedEmail = email.toLowerCase().trim();
+    const sanitizedPhone = phone.trim();
+
     // Check if user exists
-    const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+    const existingUser = await User.findOne({ $or: [{ email: sanitizedEmail }, { phone: sanitizedPhone }] });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -38,27 +44,27 @@ export const register = async (req, res, next) => {
     let user;
     if (role === 'worker') {
       user = await Worker.create({
-        name,
-        email,
-        phone,
+        name: sanitizedName,
+        email: sanitizedEmail,
+        phone: sanitizedPhone,
         password,
         role,
         ...additionalData
       });
     } else if (role === 'employer') {
       user = await Employer.create({
-        name,
-        email,
-        phone,
+        name: sanitizedName,
+        email: sanitizedEmail,
+        phone: sanitizedPhone,
         password,
         role,
         ...additionalData
       });
     } else if (role === 'admin') {
       user = await User.create({
-        name,
-        email,
-        phone,
+        name: sanitizedName,
+        email: sanitizedEmail,
+        phone: sanitizedPhone,
         password,
         role,
         ...additionalData
@@ -153,17 +159,17 @@ export const login = async (req, res, next) => {
 };
 
 // @desc    Get user by ID
-// @route   GET /api/auth/me or GET /api/auth/me/:userId
+// @route   GET /api/auth/me
 // @access  Private (with protect middleware)
 export const getMe = async (req, res, next) => {
   try {
-    // Support both authenticated user (req.user) and legacy route (req.params.userId)
-    const userId = req.user?._id || req.params.userId;
+    // Only use authenticated user ID from JWT token
+    const userId = req.user._id;
     
     if (!userId) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: 'User ID is required'
+        message: 'User not authenticated'
       });
     }
 
@@ -186,17 +192,17 @@ export const getMe = async (req, res, next) => {
 };
 
 // @desc    Update user profile
-// @route   PUT /api/auth/update-profile or PUT /api/auth/update-profile/:userId
+// @route   PUT /api/auth/update-profile
 // @access  Private (with protect middleware)
 export const updateProfile = async (req, res, next) => {
   try {
-    // Support both authenticated user (req.user) and legacy route (req.params.userId)
-    const userId = req.user?._id || req.params.userId;
+    // Only use authenticated user ID from JWT token
+    const userId = req.user._id;
     
     if (!userId) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: 'User ID is required'
+        message: 'User not authenticated'
       });
     }
 
@@ -299,17 +305,17 @@ export const updateProfile = async (req, res, next) => {
 };
 
 // @desc    Update password
-// @route   PUT /api/auth/update-password or PUT /api/auth/update-password/:userId
+// @route   PUT /api/auth/update-password
 // @access  Private (with protect middleware)
 export const updatePassword = async (req, res, next) => {
   try {
-    // Support both authenticated user (req.user) and legacy route (req.params.userId)
-    const userId = req.user?._id || req.params.userId;
+    // Only use authenticated user ID from JWT token
+    const userId = req.user._id;
     
     if (!userId) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: 'User ID is required'
+        message: 'User not authenticated'
       });
     }
 

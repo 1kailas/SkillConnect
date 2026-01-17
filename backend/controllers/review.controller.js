@@ -107,7 +107,16 @@ export const updateReview = async (req, res, next) => {
       });
     }
 
-    review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+    // Whitelist allowed fields to update
+    const allowedFields = ['rating', 'categories', 'comment'];
+    const updateData = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    });
+
+    review = await Review.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true
     });

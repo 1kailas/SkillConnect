@@ -151,10 +151,27 @@ export const getWorker = async (req, res, next) => {
 // @access  Private/Worker
 export const updateWorker = async (req, res, next) => {
   try {
-    const fieldsToUpdate = { ...req.body };
+    // Whitelist allowed fields
+    const allowedFields = [
+      'name', 'phone', 'avatar', 'profession', 'bio', 'skills',
+      'experience', 'hourlyRate', 'availability', 'location', 'languages',
+      'certifications', 'portfolio', 'socialLinks'
+    ];
+    
+    const fieldsToUpdate = {};
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        fieldsToUpdate[field] = req.body[field];
+      }
+    });
+
+    // Ensure no protected fields can be updated
     delete fieldsToUpdate.password;
     delete fieldsToUpdate.role;
     delete fieldsToUpdate.email;
+    delete fieldsToUpdate.isActive;
+    delete fieldsToUpdate.isVerified;
+    delete fieldsToUpdate.rating;
 
     const worker = await Worker.findByIdAndUpdate(
       req.user._id,
