@@ -1,19 +1,5 @@
 import { Chat, Message } from '../models/Chat.model.js';
-import Groq from 'groq-sdk';
-
-// Store conversation history in memory (in production, use database)
-const conversationHistories = new Map();
-
-// Initialize Groq client lazily
-let groqClient = null;
-const getGroqClient = () => {
-  if (!groqClient) {
-    groqClient = new Groq({
-      apiKey: process.env.GROQ_API_KEY
-    });
-  }
-  return groqClient;
-};
+import aiService from '../services/ai.service.js';
 
 // @desc    Get all chats for user
 // @route   GET /api/chat
@@ -115,7 +101,7 @@ export const getMessages = async (req, res, next) => {
 
     // Verify user is participant
     const chat = await Chat.findById(req.params.id);
-    if (!chat || !chat.participants.includes(req.user._id)) {
+    if (!chat || !chat.participants.some(p => p.toString() === req.user._id.toString())) {
       return res.status(403).json({
         success: false,
         message: 'Not authorized'
@@ -154,7 +140,7 @@ export const sendMessage = async (req, res, next) => {
 
     // Verify user is participant
     const chat = await Chat.findById(req.params.id);
-    if (!chat || !chat.participants.includes(req.user._id)) {
+    if (!chat || !chat.participants.some(p => p.toString() === req.user._id.toString())) {
       return res.status(403).json({
         success: false,
         message: 'Not authorized'
@@ -211,58 +197,19 @@ export const sendAIMessage = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Message is required' });
     }
 
-    // Get or create conversation history
-    let history = conversationHistories.get(conversationId) || [];
-
-    // Set system context based on role
-    const systemMessage = role === 'worker' 
-      ? "You are a helpful AI assistant representing an employer on SkillConnect Kerala platform. You are discussing job opportunities, project requirements, timelines, and compensation with skilled workers. Be professional, clear about job details, and help negotiate terms. Keep responses concise (2-3 sentences) and relevant to job discussions."
-      : "You are a helpful AI assistant representing a skilled worker on SkillConnect Kerala platform. You are discussing your skills, experience, availability, and rates with potential employers. Be professional, highlight your qualifications, and ask relevant questions about job requirements. Keep responses concise (2-3 sentences) and professional.";
-
-    // Add system message if this is a new conversation
-    if (history.length === 0) {
-      history.push({
-        role: 'system',
-        content: systemMessage
-      });
-    }
-
-    // Add user message to history
-    history.push({
-      role: 'user',
-      content: message
-    });
-
-    // Call Groq API
-    const groq = getGroqClient();
-    const completion = await groq.chat.completions.create({
-      messages: history,
-      model: 'llama-3.3-70b-versatile',
-      temperature: 0.7,
-      max_tokens: 300,
-      top_p: 1,
-      stream: false
-    });
-
-    const aiResponse = completion.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
-
-    // Add AI response to history
-    history.push({
-      role: 'assistant',
-      content: aiResponse
-    });
-
-    // Store updated history (limit to last 20 messages)
-    if (history.length > 20) {
-      history = [history[0], ...history.slice(-19)];
-    }
-    conversationHistories.set(conversationId, history);
+    // Use shared aiService instead of duplicate Groq client
+    const chatRole = role === 'worker' ? 'employer' : 'worker';
+    const aiResponse = await aiService.chat(
+      message,
+      conversationId || `chat-${Date.now()}`,
+      chatRole
+    );
 
     res.status(200).json({
       success: true,
       data: {
         message: aiResponse,
-        conversationId
+        conversationId: conversationId || `chat-${Date.now()}`
       }
     });
 
@@ -271,7 +218,7 @@ export const sendAIMessage = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Failed to process message',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
   }
 };
@@ -282,8 +229,8 @@ export const sendAIMessage = async (req, res, next) => {
 export const clearAIConversation = async (req, res, next) => {
   try {
     const { conversationId } = req.params;
-    conversationHistories.delete(conversationId);
-    
+    aiService.clearConversation(conversationId);
+
     res.status(200).json({
       success: true,
       message: 'Conversation cleared'

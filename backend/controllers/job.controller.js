@@ -11,7 +11,7 @@ export const getJobs = async (req, res, next) => {
       category,
       jobType,
       city,
-      status = 'open',
+      status,
       page = 1,
       limit = 12,
       sortBy = '-createdAt',
@@ -210,7 +210,7 @@ export const updateJob = async (req, res, next) => {
       'title', 'description', 'category', 'jobType', 'skillsRequired',
       'experienceRequired', 'budget', 'location', 'duration', 'status'
     ];
-    
+
     const updateData = {};
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
@@ -471,7 +471,7 @@ export const withdrawApplication = async (req, res, next) => {
     }
 
     // Remove the application
-    application.deleteOne();
+    job.applicants.pull(application._id);
     await job.save();
 
     res.status(200).json({

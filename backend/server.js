@@ -7,6 +7,8 @@ import compression from 'compression';
 import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
@@ -84,13 +86,18 @@ app.use(helmet({
 })); // Security headers
 app.use(compression()); // Compress responses
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (process.env.FRONTEND_URL || 'http://localhost:5173').split(',').map(s => s.trim()),
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(mongoSanitize()); // Prevent NoSQL injection
-app.use(morgan('dev')); // Logging
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev')); // Logging
+
+// Serve uploaded files
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -127,8 +134,8 @@ app.use('/api/ai', aiRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'success', 
+  res.status(200).json({
+    status: 'success',
     message: 'SkillConnect API is running',
     timestamp: new Date().toISOString()
   });
@@ -141,7 +148,7 @@ app.use(errorHandler);
 io.use(async (socket, next) => {
   try {
     const token = socket.handshake.auth.token;
-    
+
     if (!token) {
       return next(new Error('Authentication error: Token not provided'));
     }
@@ -149,11 +156,11 @@ io.use(async (socket, next) => {
     // Verify token
     const jwt = (await import('jsonwebtoken')).default;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     // Get user
     const User = (await import('./models/User.model.js')).default;
     const user = await User.findById(decoded.id).select('-password');
-    
+
     if (!user) {
       return next(new Error('Authentication error: User not found'));
     }
@@ -219,3 +226,25 @@ process.on('unhandledRejection', (err) => {
   console.error(`Error: ${err.message}`);
   httpServer.close(() => process.exit(1));
 });
+
+// Graceful shutdown
+const gracefulShutdown = (signal) => {
+  console.log(`\n${signal} received. Shutting down gracefully...`);
+  httpServer.close(async () => {
+    try {
+      await mongoose.connection.close();
+      console.log('MongoDB connection closed.');
+    } catch (err) {
+      console.error('Error closing MongoDB:', err);
+    }
+    process.exit(0);
+  });
+  // Force close after 10 seconds
+  setTimeout(() => {
+    console.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));

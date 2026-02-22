@@ -176,3 +176,34 @@ export const getCertificatesForVerification = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get all reviews (admin)
+// @route   GET /api/admin/reviews
+// @access  Private/Admin
+export const getReviews = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const reviews = await Review.find()
+      .sort('-createdAt')
+      .limit(parseInt(limit))
+      .skip(skip)
+      .populate('reviewer', 'name avatar email')
+      .populate('reviewee', 'name avatar email')
+      .populate('job', 'title');
+
+    const total = await Review.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      count: reviews.length,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / parseInt(limit)),
+      data: reviews
+    });
+  } catch (error) {
+    next(error);
+  }
+};

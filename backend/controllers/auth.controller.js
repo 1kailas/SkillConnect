@@ -61,13 +61,10 @@ export const register = async (req, res, next) => {
         ...additionalData
       });
     } else if (role === 'admin') {
-      user = await User.create({
-        name: sanitizedName,
-        email: sanitizedEmail,
-        phone: sanitizedPhone,
-        password,
-        role,
-        ...additionalData
+      // Admin accounts cannot be created through public registration
+      return res.status(403).json({
+        success: false,
+        message: 'Admin accounts cannot be registered publicly'
       });
     } else {
       return res.status(400).json({
@@ -165,7 +162,7 @@ export const getMe = async (req, res, next) => {
   try {
     // Only use authenticated user ID from JWT token
     const userId = req.user._id;
-    
+
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -198,7 +195,7 @@ export const updateProfile = async (req, res, next) => {
   try {
     // Only use authenticated user ID from JWT token
     const userId = req.user._id;
-    
+
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -207,7 +204,7 @@ export const updateProfile = async (req, res, next) => {
     }
 
     let user = await User.findById(userId);
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -228,7 +225,7 @@ export const updateProfile = async (req, res, next) => {
       if (req.body.experience !== undefined) fieldsToUpdate.experience = req.body.experience;
       if (req.body.bio !== undefined) fieldsToUpdate.bio = req.body.bio;
       if (req.body.hourlyRate !== undefined) fieldsToUpdate.hourlyRate = req.body.hourlyRate;
-      
+
       // Handle location - can be string or object
       if (req.body.location) {
         if (typeof req.body.location === 'string') {
@@ -242,11 +239,11 @@ export const updateProfile = async (req, res, next) => {
           if (req.body.location.coordinates) fieldsToUpdate['location.coordinates'] = req.body.location.coordinates;
         }
       }
-      
+
       // Use Worker model for worker updates
       const updatedUser = await Worker.findByIdAndUpdate(
-        userId, 
-        { $set: fieldsToUpdate }, 
+        userId,
+        { $set: fieldsToUpdate },
         {
           new: true,
           runValidators: true
@@ -267,11 +264,11 @@ export const updateProfile = async (req, res, next) => {
       if (req.body.companySize) fieldsToUpdate.companySize = req.body.companySize;
       if (req.body.industry) fieldsToUpdate.industry = req.body.industry;
       if (req.body.location) fieldsToUpdate.location = req.body.location;
-      
+
       // Use Employer model for employer updates
       const updatedUser = await Employer.findByIdAndUpdate(
-        userId, 
-        { $set: fieldsToUpdate }, 
+        userId,
+        { $set: fieldsToUpdate },
         {
           new: true,
           runValidators: true
@@ -286,8 +283,8 @@ export const updateProfile = async (req, res, next) => {
 
     // For other roles, use base User model
     const updatedUser = await User.findByIdAndUpdate(
-      userId, 
-      { $set: fieldsToUpdate }, 
+      userId,
+      { $set: fieldsToUpdate },
       {
         new: true,
         runValidators: true
@@ -311,7 +308,7 @@ export const updatePassword = async (req, res, next) => {
   try {
     // Only use authenticated user ID from JWT token
     const userId = req.user._id;
-    
+
     if (!userId) {
       return res.status(401).json({
         success: false,

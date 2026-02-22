@@ -22,7 +22,7 @@ const registerValidation = [
     .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
     .matches(/[0-9]/).withMessage('Password must contain at least one number')
     .matches(/[@$!%*?&#]/).withMessage('Password must contain at least one special character (@$!%*?&#)'),
-  body('role').isIn(['worker', 'employer', 'admin']).withMessage('Invalid role')
+  body('role').isIn(['worker', 'employer']).withMessage('Invalid role')
 ];
 
 const loginValidation = [

@@ -6,12 +6,12 @@ import { safeRegex } from '../utils/sanitize.js';
 // @access  Public
 export const getWorkers = async (req, res, next) => {
   try {
-    const { 
-      skill, 
-      city, 
-      rating, 
-      availability, 
-      page = 1, 
+    const {
+      skill,
+      city,
+      rating,
+      availability,
+      page = 1,
       limit = 12,
       sortBy = '-createdAt'
     } = req.query;
@@ -62,11 +62,11 @@ export const getWorkers = async (req, res, next) => {
 // @access  Public
 export const searchWorkers = async (req, res, next) => {
   try {
-    const { 
-      lat, 
-      lng, 
-      distance = 50, 
-      skills, 
+    const {
+      lat,
+      lng,
+      distance = 50,
+      skills,
       availability,
       minRating = 0,
       page = 1,
@@ -90,7 +90,7 @@ export const searchWorkers = async (req, res, next) => {
 
     if (skills) {
       const skillsArray = skills.split(',').map(s => s.trim());
-      query['skills.name'] = { $in: skillsArray.map(skill => new RegExp(safeRegex(skill), 'i')) };
+      query['skills.name'] = { $in: skillsArray.map(skill => safeRegex(skill)) };
     }
 
     if (availability) {
@@ -157,7 +157,7 @@ export const updateWorker = async (req, res, next) => {
       'experience', 'hourlyRate', 'availability', 'location', 'languages',
       'certifications', 'portfolio', 'socialLinks'
     ];
-    
+
     const fieldsToUpdate = {};
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
